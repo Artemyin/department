@@ -1,4 +1,5 @@
-from . import db
+from .base import db
+from .employee_model import Employee
 
 class Department(db.Model):
     __tablename__ = 'department'

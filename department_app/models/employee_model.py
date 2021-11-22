@@ -1,4 +1,4 @@
-from . import db
+from .base import db
 
 class Employee(db.Model):
     __tablename__ = 'address'

@@ -1,5 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
-db = SQLAlchemy()
+from .base import db
 
-from .department_model import Department
-from .employee_model import Employee
+def init_app(app):
+    db.init_app(app)

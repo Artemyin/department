@@ -1,6 +1,6 @@
 from . import ma
-from department_app.models import Employee, Department
-
+from department_app.models.department_model import Department
+from department_app.models.employee_model import Employee
 
 class DepartmentSchema(ma.SQLAlchemySchema):
     class Meta:
