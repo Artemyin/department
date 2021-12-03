@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Departments
+{% endblock %}
+
+{% block main %}
+{% include "add_department_modal.html" %}
+<p style="text-align:left">Departments </p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>employees</th>
+            <th></th>
+        <tr>
+    </thead>
+    <tbody>
+        {% for department in departments %}
+        <tr>
+            <td>{{ department.id }}</td>
+            <td><a href='/departments/'>{{ department.name }}</a></td>
+            <td>{{ department.employee  | length }}</td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm js-delete-item" data-id="{{department.id}}" data-endpoint="/departments" id="delete-button">
+                    Delete
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

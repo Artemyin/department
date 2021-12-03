@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Employees
+{% endblock %}
+
+{% block main %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>birthdate</th>
+            <th>salary</th>
+            <th>department</th>
+        <tr>
+    </thead>
+    <tbody>
+        {% for employee in employees %}
+        <tr>
+            <td>{{ employee.id }}</td>
+            <td>{{ employee.name }}</td>
+            <td>{{ employee.birthdate }}</td>
+            <td>{{ employee.salary }}</td>
+            <td>{{ employee.department }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<form>
+    <input autocomplete="off" autofocus id="name" placeholder="Name" type="text">
+    <input type="submit">
+</form>
+<script>
+
+    function greet()
+    {
+        let name = document.querySelector('#name').value;
+        alert('hello, ' + name);
+    }
+
+    document.querySelector('form').addEventListener('submit', greet);
+
+</script>
+
+{% endblock %}

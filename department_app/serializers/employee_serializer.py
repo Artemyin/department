@@ -1,23 +1,16 @@
+#from department_app.models.employee_model import Employee
 from . import ma
-from department_app.models.department_model import Department
-from department_app.models.employee_model import Employee
-
-class DepartmentSchema(ma.SQLAlchemySchema):
-    class Meta:
-        model = Department
-
-    id = ma.auto_field()
-    name = ma.auto_field()
-    employee = ma.auto_field()
+#from .department_serializer import DepartmentSchema
+#from marshmallow_sqlalchemy.fields import Nested
+#from flask_marshmallow import Marshmallow
+from marshmallow import fields
 
 
-class EmployeeSchema(ma.SQLAlchemyAutoSchema):
-    class Meta:
-        model = Employee
-        include_fk = True
+class EmployeeSchema(ma.Schema):
+
+    id = fields.Integer()
+    name = fields.String()
+    birthdate = fields.String()
+    salary = fields.Integer()
+    department = fields.Nested("DepartmentSchema", only=("id", "name"))
         
-    id = ma.auto_field()
-    name = ma.auto_field()
-    salary = ma.auto_field()
-        
-

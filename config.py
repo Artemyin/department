@@ -10,11 +10,11 @@ class Config:
 
     ADMINS = frozenset(['youremail@yourdomain.com'])
     SECRET_KEY = os.getenv("SECRET_KEY", "this-is-the-default-key")
-
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, 'app.db')
+    FLASK_APP = os.getenv("FLASK_APP", "app")
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, FLASK_APP  + '.db')
     DATABASE_CONNECT_OPTIONS = {}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
+    TEMPLATES_AUTO_RELOAD = True
 
 class ProductionConfig(Config):
     NAME = "Production"
