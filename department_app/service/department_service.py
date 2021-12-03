@@ -32,7 +32,9 @@ class DepartmentService:
     def delete(self, **kwargs):
         instance = self.get_by_param(**kwargs)[0]
         if instance:
+            print(f'try to delete {instance=}')
             db.session.delete(instance)
+            db.session.commit()
             print("Susesfull deleted")
             return True
         print("no element with his params")

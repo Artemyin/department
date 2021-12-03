@@ -21,15 +21,12 @@ department_bp = Blueprint(
 
 @department_bp.route('/departments/', methods=['GET'])
 def departments():
-
     departments = department_service.get_all()
-
     return render_template('departments.html', departments=departments)
 
 
 @department_bp.route('/departments/<int:id>', methods=['GET'])
 def department(id):
-
     department = department_service.get_by_param(id=id)[0]
     employees = employee_service.get_by_param(department_id=id)
     return render_template('department.html', department=department, employees=employees)
@@ -45,3 +42,4 @@ def create_department():
 def delete_department(id):
     department_service.delete(id=id)
     return redirect('/departments/')
+    
