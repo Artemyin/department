@@ -1,4 +1,5 @@
 
+from os import name
 from department_app.models.department_model import Department
 from department_app.models.base import db
 
@@ -30,10 +31,10 @@ class DepartmentService:
         return self.get_by_param(**kwargs)
 
     def delete(self, **kwargs):
-        instance = self.get_by_param(**kwargs)[0]
-        if instance:
-            print(f'try to delete {instance=}')
-            db.session.delete(instance)
+        department = self.get_by_param(**kwargs)[0]
+        if department:
+            print(f'try to delete {department=}')
+            db.session.delete(department)
             db.session.commit()
             print("Susesfull deleted")
             return True
@@ -41,7 +42,10 @@ class DepartmentService:
         return False
 
     def put(self, **kwargs):
-        pass
+        department = self.get_by_param(id=kwargs.get('id'))[0]
+        department.name = kwargs.get('name')
+        db.session.commit()
+        
 
     def path(self, **kwargs):
         pass

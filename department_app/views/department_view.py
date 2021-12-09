@@ -22,14 +22,14 @@ department_bp = Blueprint(
 @department_bp.route('/departments/', methods=['GET'])
 def departments():
     departments = department_service.get_all()
-    return render_template('departments.html', departments=departments)
+    return render_template('department/departments.html', departments=departments)
 
 
 @department_bp.route('/departments/<int:id>', methods=['GET'])
 def department(id):
     department = department_service.get_by_param(id=id)[0]
     employees = employee_service.get_by_param(department_id=id)
-    return render_template('department.html', department=department, employees=employees)
+    return render_template('department/department.html', department=department, employees=employees)
     
 
 @department_bp.route('/departments/', methods=['POST'])
@@ -38,8 +38,17 @@ def create_department():
     department_service.add(name=name)
     return redirect('/departments/')
 
+
 @department_bp.route('/departments/<int:id>', methods=['DELETE'])
 def delete_department(id):
     department_service.delete(id=id)
-    return redirect('/departments/')
+    return redirect('/departments/'), 204
     
+
+@department_bp.route('/departments/<int:id>', methods=['PUT'])
+def edit_department(id):
+    
+    name = request.json.get("name")
+    department_service.put(id=id, name=name)
+    
+    return redirect('/departments/'), 204

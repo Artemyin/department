@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Employees
+{% endblock %}
+
+{% block main %}
+<p style="text-align:left">Employees </p>
+
+{% with employees=employees %}
+    {% include "employee/employees_list.html" %}
+{% endwith %}
+
+{% endblock %}

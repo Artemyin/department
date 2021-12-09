@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Departments
+{% endblock %}
+
+{% block main %}
+Info about department
+{% with department=department %}
+    {% include "department/edit_department_modal.html" %}
+{% endwith %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>employees</th>
+        <tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ department.id }}</td>
+            <td>{{ department.name }}</td>
+            <td>{{ department.employee | length }}</td>
+        </tr>
+    </tbody>
+</table>
+Employees of department <button class="btn btn-sm btn-primary" style="float: right">add employee</button>
+
+{% with employees=employees, department=True %}
+    {% include "employee/employees_list.html" %}
+{% endwith %}
+
+
+{% endblock %}

@@ -24,5 +24,5 @@ def employee():
 
     emps= emp_service.get_all()
 
-    return render_template('employees.html', employees=emps)
+    return render_template('employee/employees.html', employees=emps)
 

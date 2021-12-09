@@ -1,0 +1,38 @@
+{% block edit_department_modal %}
+
+<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#EditDepModal{{ department.id }}" data-whatever="@getbootstrap" style="float: right">
+    Edit department
+</button>
+
+<div class="modal fade" id="EditDepModal{{ department.id }}" tabindex="-1" role="dialog" aria-labelledby="EditDepModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EditDepModalLabel">Edit department</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="js-edit-item">
+        <div class="form-group">
+        <input autocomplete="off" autofocus class="form-control" name="id" type="hidden" type="text" value="{{ department.id }}">
+        <input autocomplete="off" autofocus class="form-control" name="name" type="text" value="{{ department.name }}">
+        </div>
+             
+        <div class="modal-footer">
+          
+        {% with id=department.id, name=department.name, employee=department.employee %}
+          {% include "department/delete_department_modal.html" %}
+        {% endwith %}
+      
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary btn-sm" type="submit">Edit</button>
+        </div>
+        </form>
+    </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
