@@ -30,13 +30,14 @@ class EmployeeService:
             return employee
 
     def add(self, **kwargs):
-        print(kwargs)
         kwargs['salary'] = int(kwargs.get('salary'))
-        if kwargs.get('department'):
-            kwargs['department'] = department_service.get_by_param(id=kwargs.get('department'))[0]
-        else: 
-            kwargs['department'] = None
-        kwargs.pop('endpoint')
+
+        # if kwargs.get('department'):
+        #     kwargs['department'] = department_service.get_by_param(id=kwargs.get('department'))[0]
+        # else: 
+        #     kwargs['department'] = None
+        if kwargs.get('endpoint', False):
+            kwargs.pop('endpoint')
         print(kwargs)
         
         db.session.add(Employee(**kwargs))

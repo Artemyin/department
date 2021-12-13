@@ -11,7 +11,7 @@ class Config:
     ADMINS = frozenset(['youremail@yourdomain.com'])
     SECRET_KEY = os.getenv("SECRET_KEY", "this-is-the-default-key")
     FLASK_APP = os.getenv("FLASK_APP", "app")
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(_basedir, FLASK_APP  + '.db')
+    SQLALCHEMY_DATABASE_URI = "postgresql:///department_db"
     DATABASE_CONNECT_OPTIONS = {}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TEMPLATES_AUTO_RELOAD = True
@@ -21,6 +21,5 @@ class ProductionConfig(Config):
     
 
 class DevelopmentConfig(Config):
-    NAME = "Development"
     DEBUG = True
     DEVELOPMENT = True

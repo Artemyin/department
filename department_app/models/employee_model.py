@@ -1,4 +1,5 @@
 #from sqlalchemy.orm import backref
+from datetime import date
 from .base import db
 
 class Employee(db.Model):
@@ -6,10 +7,9 @@ class Employee(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    name = db.Column(db.String(100), unique=False, nullable=False)
-    birthdate = db.Column(db.String(20), nullable=False)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    birthdate = db.Column(db.Date, nullable=False)
     salary = db.Column(db.Integer, nullable=False)
-
     department_id = db.Column(db.Integer, db.ForeignKey('department.id'))
     department = db.relationship('Department', backref="employee")
 
