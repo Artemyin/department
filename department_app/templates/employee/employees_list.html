@@ -1,6 +1,8 @@
 {% block employees_list %}
-
-<table class="table">
+<div class="container">
+    <h1>{{ title }}</h1>
+    <hr>
+ <table id="table-data" class="table table-striped">
     <thead>
         <tr>
             <th>id</th>
@@ -8,7 +10,7 @@
             <th>birthdate</th>
             <th>salary</th>
             <th>department</th>
-            <th></th>
+            <th>actions</th>
         <tr>
     </thead>
     <tbody>
@@ -27,7 +29,7 @@
                     {{ employee.department }}
                 {% endif %}
                 
-                </td>
+            </td>
             <td>
             <button class="btn btn-sm btn-primary">
                 edit employee
@@ -43,5 +45,6 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
 
 {% endblock %}

@@ -1,7 +1,6 @@
-
-from os import name
-from department_app.models.department_model import Department
 from department_app.models.base import db
+from department_app.models.department_model import Department
+
 
 
 
@@ -12,42 +11,36 @@ class DepartmentService:
         return departments
 
     def get_by_param(self, **kwargs):
-        parameters = ("id", "name")
-        
-        if not set(kwargs.keys()).issubset(parameters):
-            print("model doesn't have this fields, only id or name")
-            return False
-
         departments = Department.query.filter_by(**kwargs).all()
         return departments 
 
     def add(self, **kwargs):
-        
-        if self.get_by_param(**kwargs):
+        if self.get_by_param(kwargs.get('name')):
             print("This name exist")
             return False 
-        db.session.add(Department(**kwargs))
+        department = Department(**kwargs)
+        db.session.add(department)
         db.session.commit()
-        return self.get_by_param(**kwargs)
+        return department
 
-    def delete(self, **kwargs):
-        department = self.get_by_param(**kwargs)[0]
-        if department:
-            print(f'try to delete {department=}')
+    def delete(self, id):
+        try:
+            department = Department.query.get_or_404(id)
+        except Exception:
+            raise LookupError
+        else:
             db.session.delete(department)
             db.session.commit()
-            print("Susesfull deleted")
             return True
-        print("no element with his params")
-        return False
 
     def put(self, **kwargs):
-        department = self.get_by_param(id=kwargs.get('id'))[0]
-        department.name = kwargs.get('name')
-        db.session.commit()
         
-
-    def path(self, **kwargs):
-        pass
-
-
+        try:
+            department = Department.query.get_or_404(kwargs.pop('id'))
+        except Exception:
+            raise LookupError
+        else:    
+            for key, value in kwargs.items():
+                setattr(department, key, value)
+            db.session.commit()
+            return department

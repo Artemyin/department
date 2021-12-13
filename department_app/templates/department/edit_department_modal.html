@@ -14,10 +14,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="js-edit-item">
+        <form class="js-edit-item" id="edit{{ department.id }}">
+       
         <div class="form-group">
         <input autocomplete="off" autofocus class="form-control" name="id" type="hidden" type="text" value="{{ department.id }}">
-        <input autocomplete="off" autofocus class="form-control" name="name" type="text" value="{{ department.name }}">
+        <input autocomplete="off" autofocus class="form-control" name="name" data-name="name" type="text" value="{{ department.name }}">
         </div>
              
         <div class="modal-footer">
@@ -27,11 +28,11 @@
         {% endwith %}
       
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary btn-sm" type="submit">Edit</button>
+        <button class="btn btn-primary btn-sm js-edit-item" type="button"  data-id="{{ department.id }}" data-endpoint="/departments/">Edit</button>
         </div>
         </form>
     </div>
-    </div>
+    
   </div>
 </div>
 

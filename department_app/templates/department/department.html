@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block main %}
-Info about department
+Info about department:
+
+
 {% with department=department %}
     {% include "department/edit_department_modal.html" %}
 {% endwith %}
@@ -25,9 +27,11 @@ Info about department
         </tr>
     </tbody>
 </table>
-Employees of department <button class="btn btn-sm btn-primary" style="float: right">add employee</button>
-
-{% with employees=employees, department=True %}
+Employees of department 
+{% with departments=departments, department=department%}
+    {% include "employee/add_employee_modal.html" %}
+{% endwith %}
+{% with employees=department.employee, department=True %}
     {% include "employee/employees_list.html" %}
 {% endwith %}
 

@@ -22,6 +22,19 @@
       <div class="modal-body">
         Are you sure to delete {{ name }} with {{ employee | length }} employees
       </div>
+      <div>
+        <input type="checkbox" id="del-dep{{id}}-users" name="with-users">
+        <label for="with-users">Delete department with all users</label>  
+      </div>
+      <div class="form-group">
+        <label for="departments" class="col-form-label">move all employee to department:</label>
+        <select name="department" id="departments">
+          <option value="{{ department.id }}">{{ department }}</option>
+          {% for department in departments %}
+            <option value="{{ department.id }}" type="number">{{ department.name }}</option>
+          {% endfor %}
+        </select>
+      </div> 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-danger js-delete-item" data-id="{{id}}" data-endpoint="/departments/">

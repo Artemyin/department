@@ -5,8 +5,12 @@
 {% endblock %}
 
 {% block main %}
-<p style="text-align:left">Employees </p>
-
+<span>
+    Employees 
+{% with departments=departments, department=None %}
+    {% include "employee/add_employee_modal.html" %}
+{% endwith %}
+</span>
 {% with employees=employees %}
     {% include "employee/employees_list.html" %}
 {% endwith %}

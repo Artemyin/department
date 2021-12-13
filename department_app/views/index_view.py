@@ -15,4 +15,4 @@ index_bp = Blueprint(
 def index():
     
     return render_template("index.html")
-    pass
+    

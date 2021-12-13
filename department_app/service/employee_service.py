@@ -1,12 +1,9 @@
-from marshmallow.fields import String
 from department_app.models import db
-from department_app.models.department_model import Department
 from department_app.models.employee_model import Employee
-
 from department_app.service.department_service import DepartmentService
 
 
-dep_service = DepartmentService()
+department_service = DepartmentService()
 
 
 class EmployeeService:
@@ -14,37 +11,46 @@ class EmployeeService:
     def get_all(self):
         employees = Employee.query.all()
         return employees
-        pass
 
     def get_by_param(self, **kwargs):
-        parameters = ("id", "name", "birthdate", "salary", "department", "department_id")
-        
-
-        if not set(kwargs.keys()).issubset(parameters):
-            print("model doesn't have this fields")
-            return False
-        
         employees = Employee.query.filter_by(**kwargs).all()
         return employees 
         
 
     def put(self, **kwargs):
-        pass    
-
-    def path(self, **kwargs):
-        pass
+        
+        try:
+            employee = Employee.query.get_or_404(kwargs.pop('id'))
+        except Exception:
+            raise LookupError
+        else:    
+            for key, value in kwargs.items():
+                setattr(employee, key, value)
+            db.session.commit()
+            return employee
 
     def add(self, **kwargs):
-        instance_parameters = [
-            kwargs.get("name"),
-            kwargs.get("birthdate"),
-            kwargs.get("salary"),
-            kwargs.get("department_id"),
-        ]
-        db.session.add(Employee(*instance_parameters))
-        db.session.commit
-        pass
+        print(kwargs)
+        kwargs['salary'] = int(kwargs.get('salary'))
+        if kwargs.get('department'):
+            kwargs['department'] = department_service.get_by_param(id=kwargs.get('department'))[0]
+        else: 
+            kwargs['department'] = None
+        kwargs.pop('endpoint')
+        print(kwargs)
+        
+        db.session.add(Employee(**kwargs))
+        db.session.commit()
+        print("employyee added")
+        return self.get_by_param(**kwargs)
 
-    def delete(**kwargs):
-        pass
+    def delete(self, id):
+        try:
+            employee = Employee.query.get_or_404(id)
+        except Exception:
+            raise LookupError
+        else:
+            db.session.delete(employee)
+            db.session.commit()
+            return True
 

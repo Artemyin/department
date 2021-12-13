@@ -1,7 +1,8 @@
-#from department_app.models.department_model import Department
+from marshmallow import fields
+
 from .serializer import ma
 from .employee_serializer import EmployeeSchema
-from marshmallow import fields
+
 
 class DepartmentSchema(ma.Schema):
 

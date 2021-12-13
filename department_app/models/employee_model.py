@@ -19,6 +19,7 @@ class Employee(db.Model):
         self.birthdate = birthdate
         self.salary = salary
         self.department = department
+        
     
         
     def __repr__(self):
