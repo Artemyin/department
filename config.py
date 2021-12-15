@@ -3,7 +3,7 @@ import os
 class Config:
     NAME = "Base"
 
-    _basedir = os.path.abspath(os.path.dirname(__file__))
+    basedir = os.path.abspath(os.path.dirname(__file__))
 
     DEBUG = False
     DEVELOPMENT = False
@@ -21,5 +21,7 @@ class ProductionConfig(Config):
     
 
 class DevelopmentConfig(Config):
+    NAME = "Development"
+    
     DEBUG = True
     DEVELOPMENT = True

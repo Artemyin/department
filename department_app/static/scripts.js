@@ -17,6 +17,7 @@ Array.prototype.forEach.call(deleteItems, (item) => { // create array of delete 
 })
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {
 const editItems = document.querySelectorAll('.js-edit-item');
 
@@ -25,7 +26,7 @@ Array.prototype.forEach.call(editItems, (item) => { // create array of delete bu
     e.preventDefault();
     const id = +e.currentTarget.dataset.id;  // get id from data-id property
     const endpoint = e.currentTarget.dataset.endpoint; // get endpoint from data-enpoint property
-    const form = document.querySelector('#edit'+id)
+    const form = document.querySelector('#edit')
     const name = form.elements['name'].value
     
     console.log('edit submit click is worked!') 
@@ -45,6 +46,31 @@ Array.prototype.forEach.call(editItems, (item) => { // create array of delete bu
 });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    const addItems = document.querySelectorAll('.js-add-item');
+    
+    Array.prototype.forEach.call(addItems, (item) => { // create array of delete buttons and assign function
+        item.addEventListener('click', (e) => {  // call function when click
+        e.preventDefault();
+        
+        const endpoint = e.currentTarget.dataset.endpoint; // get endpoint from data-enpoint property
+        const form = document.querySelector('#add')
+        const name = form.elements['name'].value
+        
+        console.log('edit submit click is worked!') 
+        console.log(name, endpoint, id)
+        const data = {"name": name}
+        const jsondata = JSON.stringify(data)
+    
+        console.log(jsondata)
+        httpAddAsync(endpoint, jsondata)
+        $('#AddDepModal'+id).modal('hide') 
+        document.location.reload(true)
+    
+    
+        })})});
+    
+
 function httpDeleteAsync(url, id, callback)
 {
     var xmlHttp = new XMLHttpRequest();
@@ -56,27 +82,31 @@ function httpDeleteAsync(url, id, callback)
     xmlHttp.send(null);
 }
 
-function httpPutAsync(url, id, data,  callback)
+
+function httpPutAsync(url, id, data)
 {
     var xmlHttp = new XMLHttpRequest();
     
     xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 204)
-            ;
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 204);
     }
+
     xmlHttp.open("PUT", url+id, true); // true for asynchronous 
     xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlHttp.send(data);
 }
 
-// document.addEventListener('DOMContentLoaded', function() {
-// $(document).ready(function () {
-//     $('#table-data').DataTable();
-//   });
 
-// });
-document.addEventListener('DOMContentLoaded', function() {
-let table = new DataTable('#table-data', {
-    // options
-});
-});
+function httpPostAsync(url, data)
+{
+    var xmlHttp = new XMLHttpRequest();
+    
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 204);
+    }
+
+    xmlHttp.open("POST", url, true); // true for asynchronous 
+    xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlHttp.send(data);
+}
+

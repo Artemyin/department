@@ -13,6 +13,7 @@ def create_app():
     models.init_app(app)
     serializers.init_app(app)
     views.init_app(app)
+    #rest.init_app(app)
 
     return app
 
