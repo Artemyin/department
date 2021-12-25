@@ -1,11 +1,14 @@
-from flask_restful import Resource, Api
+from .department_rest import api_department_bp
+from .employee_rest import api_employee_bp
 
-from flask import Blueprint
-from flask_restful import Api
+ 
+def init_app(app):
+   """[summary]
 
-#api_bp = Blueprint('api', name, url_prefix='/api/v1')
-#api = Api(api_bp)
+   :param app: [description]
+   :type app: [type]
+   """
+   app.register_blueprint(api_department_bp, url_prefix='/api/v1')
+   app.register_blueprint(api_employee_bp, url_prefix='/api/v1')
 
-#def init_app(app):
-   # app.register_blueprint(pass)
-    
+

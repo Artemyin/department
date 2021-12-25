@@ -47,28 +47,29 @@ Array.prototype.forEach.call(editItems, (item) => { // create array of delete bu
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    const addItems = document.querySelectorAll('.js-add-item');
+    const addItems = document.querySelector('.js-add-item');
     
-    Array.prototype.forEach.call(addItems, (item) => { // create array of delete buttons and assign function
-        item.addEventListener('click', (e) => {  // call function when click
-        e.preventDefault();
+    // create array of delete buttons and assign function
+        addItems.addEventListener('onclick', (e) => {  // call function when click
         
-        const endpoint = e.currentTarget.dataset.endpoint; // get endpoint from data-enpoint property
+        
+        // const endpoint = e.currentTarget.dataset.endpoint; // get endpoint from data-enpoint property
         const form = document.querySelector('#add')
         const name = form.elements['name'].value
+        const endpoint = form.elements['endpoint'].value
         
         console.log('edit submit click is worked!') 
-        console.log(name, endpoint, id)
+        console.log(name, endpoint)
         const data = {"name": name}
         const jsondata = JSON.stringify(data)
     
         console.log(jsondata)
-        httpAddAsync(endpoint, jsondata)
-        $('#AddDepModal'+id).modal('hide') 
+        httpPostAsync(endpoint, jsondata)
+        $('#AddDepModal').modal('hide') 
         document.location.reload(true)
+        e.preventDefault();
     
-    
-        })})});
+        })});
     
 
 function httpDeleteAsync(url, id, callback)

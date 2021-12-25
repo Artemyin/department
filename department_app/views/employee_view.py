@@ -23,14 +23,14 @@ employee_bp = Blueprint(
 
 @employee_bp.route('/employees/', methods=['GET'])
 def employees():
-    employees = employee_service.get_all()
-    departments = department_service.get_all()
+    employees = employee_service.read_all()
+    departments = department_service.read_all()
     return render_template('employee/employees.html', employees=employees, departments=departments)
 
 
 @employee_bp.route('/employees/<int:id>', methods=['GET'])
-def employee(id):
-    employee = employee_service.get_by_param(id=id)[0]
+def employee(id: int):
+    employee = employee_service.read_by_param(id=id)[0]
     return render_template('employee/employee.html', employee=employee)
     
 
@@ -38,19 +38,18 @@ def employee(id):
 def create_employee():
     data = request.form
     endpoint = data.get('endpoint')
-    employee_service.add(**data)
+    employee_service.create(**data)
     return redirect(endpoint)
 
 
 @employee_bp.route('/employees/<int:id>', methods=['DELETE'])
-def delete_employee(id):
+def delete_employee(id: int):
     employee_service.delete(id=id)
     return redirect('/employees/'), 204
     
 
 @employee_bp.route('/employees/<int:id>', methods=['PUT'])
-def edit_employee(id):
-    data = request.json
-    employee_service.put(id=id, data=data)
-    
+def edit_employee(id: int):
+    data = request.json()
+    employee_service.update(id=id, data=data)
     return redirect('/employees/'), 204

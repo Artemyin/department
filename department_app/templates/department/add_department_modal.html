@@ -14,14 +14,15 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="js-add-item" id="add">
+        <form class="js-add" id="add">
         <div class="form-group">
-        <input autocomplete="off" autofocus class="form-control" name="name" placeholder="Name" type="text">
+      <input autocomplete="off" autofocus class="form-control" name="endpoint" type="hidden" type="text" value="/departments/">
+      <input autocomplete="off" autofocus class="form-control" name="name" placeholder="Name" type="text" value="">
         </div>
          
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary btn-sm js-add-item" type="button" data-endpoint="/departments/">Add</button>
+        <button class="btn btn-primary btn-sm js-add-item" id="addbutton" type="button" data-endpoint="/departments/">Add</button>
         </div>
     </form>
     </div>
