@@ -24,16 +24,16 @@ def create_fake_users(n):
         
         for department in departments:
             print(department)
-            dep = ds.add(name=department)
+            dep = ds.create(name=department)
 
         print(f'Added {len(departments)} departments to the database.')
 
         for i in range(n):
             emp = Employee(
                 name=faker.name(),
-                birthdate= faker.date_of_birth(minimum_age=18, maximum_age=60),
+                birthdate=faker.date_of_birth(minimum_age=18, maximum_age=60),
                 salary=random.randint(100, 1000),
-                department=ds.get_by_param(name=random.choice(departments))[0],
+                department=ds.read_by_param(name=random.choice(departments))[0],
             )
             db.session.add(emp)
             print(emp)

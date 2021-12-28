@@ -86,12 +86,12 @@ class EmployeeService:
         #     kwargs['department'] = None
         if kwargs.get('endpoint', False):
             kwargs.pop('endpoint')
-        print(kwargs)
+        print(f'service args: {kwargs}')
         
         db.session.add(Employee(**kwargs))
         db.session.commit()
         print("employyee added")
-        return self.get_by_param(**kwargs)
+        return self.read_by_param(**kwargs)
 
     def delete(self, id):
         """[summary]

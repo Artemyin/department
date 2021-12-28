@@ -16,7 +16,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('name', required=True, help='Name cannot be blank!')
 parser.add_argument('birthdate', required=True, help='Birthdate cannot be blank!')
 parser.add_argument('salary', required=True, type=int, help='Salary cannot be blank!')
-parser.add_argument('department', required=False)
+parser.add_argument('department', required=False, type=int, default=None)
 
 
 class EmployeeListAPI(Resource):
@@ -40,13 +40,21 @@ class EmployeeListAPI(Resource):
         :rtype: [type]
         """
         args = parser.parse_args()
+
+        errors = employee_schema.validate(args)
+        print("errors:", errors)
+        #print("errors", errors.valid_data)
+        #if errors:
+            #return errors, 400
+        print(f'arguments: {args=}')    
         employee = employee_service.create(
             name=args['name'],
             birthdate=args['birthdate'],
             salary=args['salary'],
             department=args['department']
         )
-        return employee_schema.dump(employee), 200
+        print(f'instance: {employee=}')
+        return 200 #employee_schema.dump(employee), 200
 
 
 class EmployeeAPI(Resource):

@@ -18,7 +18,7 @@ class Employee(db.Model):
     department = db.relationship('Department', backref="employee")
 
     
-    def __init__(self, name: str, birthdate: date, salary: int, department: Department = None) -> None:
+    def __init__(self, name: str, birthdate: date, salary: int, department = None) -> None:
         """Employee model constructor.
 
         :param name: employee name

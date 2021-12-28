@@ -1,6 +1,7 @@
 from flask_restful import Resource
-from flask import Blueprint
+from flask import Blueprint, request
 from flask_restful import Api, reqparse
+import requests
 from department_app.service.department_service import DepartmentService
 from department_app.serializers.department_serializer import DepartmentSchema
 
@@ -11,8 +12,7 @@ api_department_bp = Blueprint('departemnt_api', __name__)
 api = Api(api_department_bp)
 
 parser = reqparse.RequestParser()
-parser.add_argument('name', required=True, help='Name cannot be blank!')
-
+parser.add_argument('name', required=True, help='Name cannot be blank!',  location='json')
 
 class DepartmentListAPI(Resource):
 
@@ -30,7 +30,17 @@ class DepartmentListAPI(Resource):
     def post():
         """[summary]
         """
-        pass
+        
+        
+        #args = parser.parse_args()
+        args = request.json
+        print(args)
+        print(args['name'])
+        errors = department_schema.validate(args)
+        print("errors", errors)
+        department = department_service.create(name=args['name'])
+        return department_schema.dump(department), 200
+        
 
 
 class DepartmentAPI(Resource):
@@ -46,6 +56,11 @@ class DepartmentAPI(Resource):
         :return: department json and HTTP status code 200 if succesfull
         :rtype: JSON, HTTP status code
         """
+        data = {'id': id}
+        errors = department_schema.validate(data)
+        print("errors", errors)
+        if errors:
+            return errors, 400
         department = department_service.read_by_param(id=id)[0]
         return department_schema.dump(department), 200
         
