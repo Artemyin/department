@@ -25,7 +25,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('name', required=True, help='Name cannot be blank!')
 parser.add_argument('birthdate', required=True, help='Birthdate cannot be blank!')
 parser.add_argument('salary', required=True, type=int, help='Salary cannot be blank!')
-parser.add_argument('department', required=False, type=int, default=None)
+parser.add_argument('department', required=True, type=int, default=None)
 
 
 class EmployeeListAPI(Resource):

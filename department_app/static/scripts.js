@@ -92,12 +92,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("click is ok")
         const form = document.querySelector('#AddDep')
         const name = form.elements['name'].value  
-        const endpoint = form.elements['endpoint'].value    
-
+       
         const data = {"name": name}
         const jsondata = JSON.stringify(data)
 
-        httpPostAsync(endpoint, jsondata)
+        httpPostAsync('/departments/', jsondata)
         document.location.reload(true)
         e.preventDefault();
     
@@ -119,22 +118,20 @@ document.addEventListener('DOMContentLoaded', function() {
             if (department == '') {
                 department = null
             }
-            const endpoint = form.elements['endpoint'].value  
-    
+
         const data = {
             "name": name,
             "birthdate": birthdate,
             "salary": salary,
             "department": department,
             }
-        console.log(data)    
+
         const jsondata = JSON.stringify(data)
-        console.log(jsondata)    
-        httpPostAsync(endpoint, jsondata)
+
+        httpPostAsync('/employees/', jsondata)
         // document.location.reload(true)
         e.preventDefault();     
-        
-        
+               
         });
     });
 

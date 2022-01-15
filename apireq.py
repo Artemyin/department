@@ -30,7 +30,7 @@ def post_to_employee():
     param_dict = {'name': 'Merriam Webster',
         'birthdate': '1986-06-22', 
         'salary': 100,
-        #'department': 4,
+        'department': 4,
         }
     
     print(param_dict.get('birthdate'))
