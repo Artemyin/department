@@ -1,22 +1,25 @@
-from marshmallow import fields, validates, ValidationError, validate
+from marshmallow import fields, validates, ValidationError, validate, post_load, pre_load
 
 from . import ma
 
 from department_app.models.department_model import Department
 from department_app.models.employee_model import Employee
-
+from department_app.models import db
 
 class EmployeeSchema(ma.Schema):
 
     class Meta:
-        #model = Employee
+        model = Employee                      
         dateformat = '%Y-%m-%d'
+         
+            
 
     id = fields.Integer()
     name = fields.String(validate=validate.Length(min=2))
     birthdate = fields.Date()
     salary = fields.Integer(validate=validate.Range(min=0))
-    department = fields.Nested("DepartmentSchema", only=("id", "name"), required=False)
+    department = fields.Nested("DepartmentSchema", only=("id", "name"), required=False, 
+        allow_none=True, default=None, )
         
 
     @validates("name")
@@ -31,6 +34,20 @@ class EmployeeSchema(ma.Schema):
 
     # @validates("department")
     # def is_department_exist(self, id):
-    #     if not Department.query.filter_by(id=id).all():
-    #         raise ValidationError("There is no department id in DB")
+    #      if not Department.query.filter_by(id=id).all():
+    #          raise ValidationError("There is no department id in DB")
 
+    @pre_load
+    def before_make_employee(self, data, **kwargs):
+        print('pre_load')
+        if data.get('department'):
+            print(data.get('department'))
+            data['department'] = Department.query.get(data.get('department')) 
+            print(data.get('department'))
+        return data
+
+
+    @post_load
+    def make_employee(self, data, **kwargs):
+        return Employee(**data)
+        

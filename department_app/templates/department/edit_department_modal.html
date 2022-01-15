@@ -1,10 +1,10 @@
 {% block edit_department_modal %}
 
-<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#EditDepModal{{ department.id }}" data-whatever="@getbootstrap" style="float: right">
-    Edit department
+<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#EditDepModal{{ department.id }}" data-whatever="@getbootstrap" style="float: left" >
+    Edit
 </button>
 
-<div class="modal fade" id="EditDepModal{{ department.id }}" tabindex="-1" role="dialog" aria-labelledby="EditDepModalLabel" aria-hidden="true">
+<div class="modal fade" id="EditDepModal{{ department.id }}" tabindex="-1" role="dialog" aria-labelledby="EditDepModalLabel" aria-hidden="true" data-backdrop="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -23,15 +23,13 @@
              
         <div class="modal-footer">
           
-        {% with id=department.id, name=department.name, employee=department.employee %}
-          {% include "department/delete_department_modal.html" %}
-        {% endwith %}
+        
       
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary btn-sm js-edit-item" type="button"  data-id="{{ department.id }}" data-endpoint="/departments/">Edit</button>
+        <button class="btn btn-primary btn-sm js-edit-item" type="button"  data-id="{{ department.id }}" data-endpoint="/departments/" data-dismiss="modal">Edit</button>
         </div>
         </form>
-    </div>
+      </div>
     
   </div>
 </div>

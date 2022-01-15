@@ -8,6 +8,9 @@ from department_app.serializers.department_serializer import DepartmentSchema
 department_service = DepartmentService()
 department_schema = DepartmentSchema()
 
+from department_app.service.employee_service import EmployeeService
+employee_service = EmployeeService()
+
 api_department_bp = Blueprint('departemnt_api', __name__)
 api = Api(api_department_bp)
 
@@ -90,6 +93,16 @@ class DepartmentAPI(Resource):
         :return: 204 HTTP status code if sucesfull
         :rtype: HTTP status code
         """
+        
+        orphan = request.args.get('orphan', type=int)
+        print(orphan)
+        if orphan:
+            print('delete this employees')
+            department = department_service.read_by_param(id=id)[0]
+            print(department.employee)
+            for employee in department.employee:
+                print(employee)
+                employee_service.delete(id=employee.id)
         department_service.delete(id)
         return 204
 

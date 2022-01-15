@@ -1,16 +1,12 @@
 {% block delete_department_modal %}
 
-<!-- <button type="button" class="btn btn-danger btn-sm js-delete-item" data-id="{{department.id}}" data-endpoint="/departments/">
-  Delete
-</button> -->
-
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-danger btn-sm mr-auto" data-toggle="modal" data-target="#DeleteDepModal{{ id }}" >
+<button type="button" class="btn btn-danger btn-sm mr-auto" data-toggle="modal" data-target="#DeleteDepModal{{ id }}" data-whatever="@getbootstrap" style="float: right">
   Delete
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="DeleteDepModal{{ id }}" tabindex="-1" role="dialog" aria-labelledby="DeleteDepModalLabel" aria-hidden="true">
+<div class="modal fade" id="DeleteDepModal{{ id }}" tabindex="-1" role="dialog" aria-labelledby="DeleteDepModalLabel" aria-hidden="true" data-backdrop="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -22,25 +18,20 @@
       <div class="modal-body">
         Are you sure to delete {{ name }} with {{ employee | length }} employees
       </div>
-      <div>
-        <input type="checkbox" id="del-dep{{id}}-users" name="with-users">
-        <label for="with-users">Delete department with all users</label>  
-      </div>
-      <div class="form-group">
-        <label for="departments" class="col-form-label">move all employee to department:</label>
-        <select name="department" id="departments">
-          <option value="{{ department.id }}">{{ department }}</option>
-          {% for department in departments %}
-            <option value="{{ department.id }}" type="number">{{ department.name }}</option>
-          {% endfor %}
-        </select>
-      </div> 
-      <div class="modal-footer">
+      <form>
+        <div>
+        <input type="checkbox" id="del-dep{{id}}" name="del-dep{{id}}" value="true">
+        <label for="del-dep{{id}}"> delete with employees </label>
+        <p>*Select if you want to delete department with all employees, <br> otherwise all employees will move to None department  </p>
+        </div>
+      
+        <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-danger js-delete-item" data-id="{{id}}" data-endpoint="/departments/">
-          Delete
+        Delete
         </button>
-      </div>
+        </div>
+    </form>
     </div>
   </div>
 </div>

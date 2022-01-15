@@ -14,11 +14,11 @@ class Employee(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     birthdate = db.Column(db.Date, nullable=False)
     salary = db.Column(db.Integer, nullable=False)
-    department_id = db.Column(db.Integer, db.ForeignKey('department.id'))
-    department = db.relationship('Department', backref="employee")
+    department_id = db.Column(db.Integer, db.ForeignKey('department.id'), nullable=True)
+    department = db.relationship('Department', back_populates="employee")
 
     
-    def __init__(self, name: str, birthdate: date, salary: int, department = None) -> None:
+    def __init__(self, name: str, birthdate: date, salary: int, department=None) -> None:
         """Employee model constructor.
 
         :param name: employee name
@@ -33,7 +33,7 @@ class Employee(db.Model):
         self.name = name
         self.birthdate = birthdate
         self.salary = salary
-        self.department = department
+        self.department_id = department
         
             
     def __repr__(self) -> str:

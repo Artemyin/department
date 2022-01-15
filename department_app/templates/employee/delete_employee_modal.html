@@ -1,35 +1,29 @@
 {% block delete_employee_modal %}
 
-<!-- <button type="button" class="btn btn-danger btn-sm js-delete-item" data-id="{{department.id}}" data-endpoint="/departments/">
-  Delete
-</button> -->
-
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#DeleteDepModal{{ id }}" style="float: right">
+<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#DeleteEmpModal{{ employee.id }}" style="float: right">
   Delete
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="DeleteDepModal{{ id }}" tabindex="-1" role="dialog" aria-labelledby="DeleteDepModalLabel" aria-hidden="true">
+<div class="modal fade" id="DeleteEmpModal{{ employee.id }}" tabindex="-1" role="dialog" aria-labelledby="DeleteEmpModalLabel" aria-hidden="true" data-backdrop="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="DeleteDepModalLabel">Delete employee</h5>
+        <h5 class="modal-title" id="DeleteEmpModalLabel">Delete employee</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        Do you want delete employee from department or delete from the system?
+        Do you want delete {{ employee.name }} ?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger js-delete-item" data-id="{{id}}" data-endpoint="/employee/">
-        Delete from the department
+        <button type="button" class="btn btn-danger js-delete-item" data-id="{{employee.id}}" data-endpoint="/employees/">
+        Delete 
         </button>
-        <button type="button" class="btn btn-danger js-delete-item" data-id="{{id}}" data-endpoint="/employee/">
-        Delete from the system
-        </button>
+
       </div>
     </div>
   </div>

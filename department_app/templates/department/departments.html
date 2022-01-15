@@ -14,7 +14,8 @@
             <th>id</th>
             <th>name</th>
             <th>employees</th>
-            <th></th>
+            <th style="text-align: center;">actions</th>
+            
         <tr>
     </thead>
     <tbody>
@@ -24,11 +25,20 @@
             <td><a href='/departments/{{ department.id }}'>{{ department.name }}</a></td>
             <td>{{ department.employee  | length }}</td>
             <td>
-                
+        
+            <div >
                 {% with department=department %}
                     {% include "department/edit_department_modal.html" %}
                 {% endwith %}
+            </div>
+            <div >
+                {% with id=department.id, name=department.name, employee=department.employee %}
+                    {% include "department/delete_department_modal.html" %}
+                {% endwith %}
+            </div>
+            
             </td>
+
         </tr>
         {% endfor %}
     </tbody>

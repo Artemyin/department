@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from department_app.models import db
 from department_app.models.employee_model import Employee
 from department_app.service.department_service import DepartmentService
@@ -62,36 +64,48 @@ class EmployeeService:
         :return: [description]
         :rtype: [type]
         """
+        kwargs['salary'] = int(kwargs.get('salary'))
+        kwargs['birthdate'] = datetime.strptime(kwargs.get('birthdate'), '%Y-%m-%d')
+        if kwargs.get('department'):
+            kwargs['department'] = int(kwargs.get('department')) 
+        else:
+            kwargs['department'] = None
+        print(f'service args: {kwargs}')
         try:
             employee = Employee.query.get_or_404(kwargs.pop('id'))
         except Exception:
             raise LookupError
         else:    
             for key, value in kwargs.items():
+                print(f'employee = {employee}, {key=}, {value=}')
                 setattr(employee, key, value)
             db.session.commit()
             return employee
 
-    def create(self, **kwargs):
+    def _create(self, **kwargs):
         """[summary]
 
         :return: [description]
         :rtype: [type]
         """
         kwargs['salary'] = int(kwargs.get('salary'))
-
-        # if kwargs.get('department'):
-        #     kwargs['department'] = department_service.get_by_param(id=kwargs.get('department'))[0]
-        # else: 
-        #     kwargs['department'] = None
-        if kwargs.get('endpoint', False):
-            kwargs.pop('endpoint')
+        kwargs['birthdate'] = datetime.strptime(kwargs.get('birthdate'), '%Y-%m-%d')
+        if kwargs.get('department'):
+            kwargs['department'] = int(kwargs.get('department')) 
+        else:
+            kwargs['department'] = None
         print(f'service args: {kwargs}')
-        
-        db.session.add(Employee(**kwargs))
+        employee = Employee(name=kwargs.get('name'), 
+            birthdate=kwargs.get('birthdate'),
+            salary=kwargs.get('salary'), 
+            department=kwargs.get('department')
+            )
+        db.session.add(employee)
         db.session.commit()
         print("employyee added")
-        return self.read_by_param(**kwargs)
+        return self.read_by_param(name=kwargs.get('name'))
+
+    
 
     def delete(self, id):
         """[summary]
@@ -107,7 +121,8 @@ class EmployeeService:
         except Exception:
             raise LookupError
         else:
-            db.session.delete(employee)
-            db.session.commit()
+            print(f'delete {employee}')
+            #db.session.delete(employee)
+            #db.session.commit()
             return True
 

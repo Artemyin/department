@@ -8,6 +8,9 @@ from department_app.models.department_model import Department
 
 class DepartmentSchema(ma.Schema):
 
+    class Meta:
+        model = Department
+
     id = fields.Integer()
     name = fields.String()
     employee = fields.Nested(EmployeeSchema(exclude=("department",)), many=True)

@@ -56,7 +56,8 @@ class DepartmentService:
         except Exception:
             raise LookupError
         else:
-            db.session.delete(department)
+            print(f'delete {department}')
+            #db.session.delete(department)
             db.session.commit()
             return True
 

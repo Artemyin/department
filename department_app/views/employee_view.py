@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template, redirect, request
+from flask import Blueprint, jsonify, render_template, redirect, request, flash, url_for
 
 from department_app.service.employee_service import EmployeeService
 from department_app.service.department_service import DepartmentService
@@ -11,7 +11,7 @@ employee_service = EmployeeService()
 department_service = DepartmentService()
 
 
-employee_schema = EmployeeSchema(many=True)
+employee_schema = EmployeeSchema()
 department_schema = DepartmentSchema(many=True)
 
 # Blueprint Configuration
@@ -25,6 +25,7 @@ employee_bp = Blueprint(
 def employees():
     employees = employee_service.read_all()
     departments = department_service.read_all()
+    
     return render_template('employee/employees.html', employees=employees, departments=departments)
 
 
@@ -33,23 +34,30 @@ def employee(id: int):
     employee = employee_service.read_by_param(id=id)[0]
     return render_template('employee/employee.html', employee=employee)
     
-
+"""
 @employee_bp.route('/employees/', methods=['POST'])
 def create_employee():
-    data = request.form
-    endpoint = data.get('endpoint')
+    data = request.get_json()
+    errors = employee_schema.validate(data)
+    if errors:
+        return jsonify(errors)
     employee_service.create(**data)
-    return redirect(endpoint)
+    return jsonify(status="ok")
 
 
 @employee_bp.route('/employees/<int:id>', methods=['DELETE'])
 def delete_employee(id: int):
+    errors = employee_schema.is_id_exist(id)
+    print("errors:", errors)
+    
     employee_service.delete(id=id)
     return redirect('/employees/'), 204
     
 
 @employee_bp.route('/employees/<int:id>', methods=['PUT'])
 def edit_employee(id: int):
-    data = request.json()
-    employee_service.update(id=id, data=data)
+    data = request.get_json()
+    employee_service.update(id=id, **data)
     return redirect('/employees/'), 204
+
+"""

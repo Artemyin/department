@@ -7,10 +7,11 @@
 {% block main %}
 Info about department:
 
-
+<div>
 {% with department=department %}
     {% include "department/edit_department_modal.html" %}
 {% endwith %}
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -27,13 +28,16 @@ Info about department:
         </tr>
     </tbody>
 </table>
+<div></div>
 Employees of department 
 {% with departments=departments, department=department%}
     {% include "employee/add_employee_modal.html" %}
 {% endwith %}
+</div>
+<div>
 {% with employees=department.employee, department=True %}
     {% include "employee/employees_list.html" %}
 {% endwith %}
-
+</div>
 
 {% endblock %}

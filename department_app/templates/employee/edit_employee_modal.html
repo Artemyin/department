@@ -1,0 +1,56 @@
+{% block edit_employee_modal %}
+
+<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#EditEmpModal{{ employee.id }}" data-whatever="@getbootstrap" style="float: left" >
+    Edit
+</button>
+
+<div class="modal fade" id="EditEmpModal{{ employee.id }}" tabindex="-1" role="dialog" aria-labelledby="EditEmpModalLabel" aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="EditDepModalLabel">Edit employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="js-edit-item" id="edit{{ employee.id }}">
+              <div class="form-group">
+                <label for="name" class="col-form-label" >Name:</label>
+                <input autocomplete="off" autofocus class="form-control col-form" name="name" placeholder="Name" type="text" value="{{ employee.name }}">
+              </div>
+              <div class="form-group">
+                <label for="birthdate" class="col-form-label">Birthdate:</label>
+                <input autocomplete="off"  class="form-control col-form" name="birthdate" placeholder="birthdate" type="date" value="{{ employee.birthdate }}"
+                min="1900-01-01" max="2022-01-01">
+                
+              </div>
+              <div class="form-group">
+                <label for="salary" class="col-form-label">Salary:</label>
+                <input autocomplete="off"  class="form-control col-form" name="salary" placeholder="salary" type="number" value="{{ employee.salary }}">
+              </div>
+              <div class="form-group">
+                <label for="departments" class="col-form-label">Department:</label>
+                <select name="department" id="departments">
+                <option value="{{ employee.department.id }}">{{ employee.department }}</option>
+                {% for department in departments %}
+                  <option value="{{ department.id }}" type="number">{{ department.name }}</option>
+                {% endfor %}
+                  <option value='' type="number">None</option>
+                </select>
+              </div> 
+              <div class="form-group">
+                <input class="form-control col-form" style="visibility: hidden;" type="hiden" name="endpoint" value="{{ request.path }}">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                
+                <button class="btn btn-primary btn-sm js-edit-item" data-dismiss="modal" type="button"  data-id="{{ employee.id }}" data-endpoint="/employees/">Edit</button>
+              </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

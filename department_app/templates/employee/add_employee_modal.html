@@ -4,7 +4,7 @@
     Add new employee
 </button>
 
-<div class="modal fade" id="AddEmpModal" tabindex="-1" role="dialog" aria-labelledby="AddEmpModalLabel" aria-hidden="true">
+<div class="modal fade" id="AddEmpModal" tabindex="-1" role="dialog" aria-labelledby="AddEmpModalLabel" aria-hidden="true" data-backdrop="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -15,20 +15,24 @@
       </div>
 
     <div class="modal-body">
-    <form action="/employees" method="post">
+    <form class="js-add" id="AddEmp">
       <div class="form-group">
         <label for="name" class="col-form-label" >Name:</label>
         <input autocomplete="off" autofocus class="form-control col-form" name="name" placeholder="Name" type="text">
       </div>
       <div class="form-group">
+
         <label for="birthdate" class="col-form-label">Birthdate:</label>
-        <input autocomplete="off"  class="form-control col-form" name="birthdate" placeholder="birthdate" type="text">
+        <input autocomplete="off"  class="form-control col-form" name="birthdate" placeholder="birthdate" type="date" value="2000-01-01"
+        min="1900-01-01" max="2022-01-01">
+      
       </div>
+
         <div class="form-group">
           <label for="salary" class="col-form-label">Salary:</label>
         <input autocomplete="off"  class="form-control col-form" name="salary" placeholder="salary" type="number">
       </div>
-
+      <input autocomplete="off" autofocus class="form-control" name="endpoint" type="hidden" type="text" value="/employees/">
       <div class="form-group">
         <label for="departments" class="col-form-label">Department:</label>
         <select name="department" id="departments">
@@ -45,7 +49,8 @@
            
         <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary" type="submit">Add</button>
+        <button class="btn btn-primary  js-add-item" type="button" id="AddEmpButton" data-dismiss="modal">Add</button>
+        
         </div>
     </form>
     </div>
