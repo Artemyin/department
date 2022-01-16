@@ -4,3 +4,7 @@ __pycache__
 .pyc
 /depenv
 \__pycache__
+venv
+Scripts
+Lib
+pyvenv.cfg

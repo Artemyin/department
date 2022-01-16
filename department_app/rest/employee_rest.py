@@ -1,3 +1,4 @@
+from datetime import datetime
 from marshmallow import ValidationError
 
 from flask_restful import Resource
@@ -42,6 +43,23 @@ class EmployeeListAPI(Resource):
         #return {'data': employee_schema.dump(employees, many=True)}, 200
         query = Employee.query
 
+
+        # daterange
+        start_date_raw = request.args.get('start_date')
+        end_date_raw = request.args.get('end_date')
+
+        if start_date_raw:
+            start_date = datetime.strptime(start_date_raw, '%Y-%m-%d')
+        else:
+            start_date = datetime(1900, 1, 1) 
+
+        if end_date_raw:
+            end_date = datetime.strptime(end_date_raw, '%Y-%m-%d')
+        else:
+            end_date = datetime.now()
+
+        query = query.filter(Employee.birthdate.between(start_date,end_date))
+       
         # search filter
         search = request.args.get('search[value]')
         if search:
@@ -52,6 +70,7 @@ class EmployeeListAPI(Resource):
         start = request.args.get('start', type=int)
         length = request.args.get('length', type=int)
         query = query.offset(start).limit(length)
+        print(query)
 
         # response
         return {

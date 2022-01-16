@@ -49,32 +49,25 @@
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
   <script>
     /* Custom filtering function which will search data in column four between two values */
-    $.fn.dataTable.ext.search.push(
-    function( settings, searchData, index, rowData, counter ) {
- 
-      console.log("run search")
-        var min = parseInt( $('#startdate').val(), 10 );
-        var max = parseInt( $('#enddate').val(), 10 );
-        var salary = parseFloat( data[3] ) || 0; // use data for the age column
-        console.log(min, max, salary)
-        if ( ( isNaN( min ) && isNaN( max ) ) ||
-             ( isNaN( min ) && salary <= max ) ||
-             ( min <= salary   && isNaN( max ) ) ||
-             ( min <= salary   && salary <= max ) )
-        {
-            return true;
-        }
-        return false;
-    }
-);
+
     $(document).ready(function () {
+          // var startdate = document.getElementById('startdate').value;
         console.log("run table")
+         var start_date = document.getElementById('startdate').value;
+
+        var end_date = document.getElementById('enddate').value;
+
+
+        fetch_data(start_date, end_date)
+
+        function fetch_data(start_date, end_date)
+          {
         var table = $('#data').DataTable({
         ajax: {
           url: '/api/v1/employees',
           data:{
-          start_date: "start_date",
-          end_date: "end_date",
+          start_date: start_date,
+          end_date: end_date,
           },
         },
         serverSide: true,
@@ -103,14 +96,21 @@
         ],
       
         });
-          // Event listener to the two range filtering inputs to redraw on input
+          }
+        // Event listener to the two range filtering inputs to redraw on input
         $('#applydate').click( function() {
-          var startdate = document.getElementById('startdate').value;
-          var enddate = document.getElementById('enddate').value;
-          console.log(startdate, enddate)
+          console.log("inside click" , start_date, end_date)
+          start_date = document.getElementById('startdate').value;
+
+          end_date = document.getElementById('enddate').value;
+          console.log("inside click2 ", start_date, end_date)
             console.log("click table")
-            table.draw();
+            
+            // table.draw();
+            $('#data').DataTable().destroy();
+            fetch_data(start_date, end_date);
         } );
+
     });
   </script>
 
