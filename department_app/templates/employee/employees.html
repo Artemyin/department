@@ -69,8 +69,15 @@
     $(document).ready(function () {
         console.log("run table")
         var table = $('#data').DataTable({
-        ajax: '/api/v1/employees',
+        ajax: {
+          url: '/api/v1/employees',
+          data:{
+          start_date: "start_date",
+          end_date: "end_date",
+          },
+        },
         serverSide: true,
+        
         columns: [
         {data: 'id'},
         {data: 'name'},
