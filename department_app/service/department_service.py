@@ -9,10 +9,10 @@ class DepartmentService:
         departments = Department.query.all()
         return departments
 
+
     def read_by_param(self, **kwargs):
         departments = Department.query.filter_by(**kwargs).all()
         return departments
-            
          
 
     def create(self, **kwargs) -> Department:
@@ -33,13 +33,11 @@ class DepartmentService:
         :return: created Department or False if cannot create department with this name
         :rtype: Department | bool
         """
-        if self.read_by_param(name=kwargs.get('name')):
-            print("This name exist")
-            return False 
-        department = Department(**kwargs)
+        department=kwargs.get('department')
         db.session.add(department)
         db.session.commit()
         return department
+
 
     def delete(self, id: int) -> bool:
         """Delete department from db
@@ -51,15 +49,10 @@ class DepartmentService:
         :return: True if department deleted succesfull
         :rtype: bool
         """
-        try:
-            department = Department.query.get_or_404(id)
-        except Exception:
-            raise LookupError
-        else:
-            print(f'delete {department}')
-            #db.session.delete(department)
-            db.session.commit()
-            return True
+        department = Department.query.get(id)
+        db.session.delete(department)
+        db.session.commit()
+
 
     def update(self, **kwargs) -> Department:
         """[summary]
@@ -77,12 +70,11 @@ class DepartmentService:
         :return: updated department 
         :rtype: Department object
         """
-        try:
-            department = Department.query.get_or_404(kwargs.pop('id'))
-        except Exception:
-            raise LookupError
-        else:    
-            for key, value in kwargs.items(): # Parse kwargs.
-                setattr(department, key, value) # Reassign to deppartment new value by key.
-            db.session.commit()
-            return department # Return updated department.
+        department = Department.query.get_or_404(kwargs.pop('id'))
+        args = kwargs.get('department')
+        columns = [m.key for m in args.__table__.columns if m.key != 'id']
+        for attr in columns:
+            setattr(department, attr, args.__getattribute__(attr))
+        db.session.commit()
+        return department
+

@@ -1,3 +1,4 @@
+from marshmallow import ValidationError
 from flask_restful import Resource
 from flask import Blueprint, request
 from flask_restful import Api, reqparse
@@ -15,7 +16,7 @@ api_department_bp = Blueprint('departemnt_api', __name__)
 api = Api(api_department_bp)
 
 parser = reqparse.RequestParser()
-parser.add_argument('name', required=True, help='Name cannot be blank!',  location='json')
+parser.add_argument('name', required=True, help='Name cannot be blank!')
 
 class DepartmentListAPI(Resource):
 
@@ -33,18 +34,14 @@ class DepartmentListAPI(Resource):
     def post():
         """[summary]
         """
-        
-        
-        #args = parser.parse_args()
-        args = request.json
-        print(args)
-        print(args['name'])
-        errors = department_schema.validate(args)
-        print("errors", errors)
-        department = department_service.create(name=args['name'])
+        args = parser.parse_args()
+        try:
+            department = department_schema.load(args)
+            department = employee_service.create(department=department)
+        except ValidationError as err:
+            return err.messages
         return department_schema.dump(department), 200
         
-
 
 class DepartmentAPI(Resource):
 
@@ -78,9 +75,13 @@ class DepartmentAPI(Resource):
         :rtype: [type]
         """
         args = parser.parse_args()
-        department = department_service.update(id=id, name=args['name'])
+        try:
+            department_schema.is_id_exist(id)
+            department = department_schema.load(args)
+            department = department_service.update(department=department, id=id)   
+        except ValidationError as err:
+            return err.messages
         return department_schema.dump(department), 200
-        
 
     @staticmethod        
     def delete(id: int):
@@ -92,19 +93,19 @@ class DepartmentAPI(Resource):
         :type id: int
         :return: 204 HTTP status code if sucesfull
         :rtype: HTTP status code
-        """
-        
+        """        
         orphan = request.args.get('orphan', type=int)
-        print(orphan)
         if orphan:
-            print('delete this employees')
             department = department_service.read_by_param(id=id)[0]
-            print(department.employee)
             for employee in department.employee:
-                print(employee)
                 employee_service.delete(id=employee.id)
-        department_service.delete(id)
-        return 204
+        try:
+            department_schema.is_id_exist(id)
+            department_service.delete(id)
+        except ValidationError as err:
+            return err.messages, 400
+        else:
+            return 204
 
 api.add_resource(DepartmentListAPI, '/departments/')
 api.add_resource(DepartmentAPI, '/departments/<int:id>')

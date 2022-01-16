@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Employees
+{% endblock %}
+
+{% block main %}
+<span>
+    Employees 
+{% with departments=departments, department=None %}
+    {% include "employee/add_employee_modal.html" %}
+{% endwith %}
+</span>
+{{ employees[0].department }}
+<div class="container box">
+  <h1 align="center">Date Range Search in Datatables using PHP Ajax</h1>
+  <br />
+  <div class="table-responsive">
+   <br />
+   <div class="row">
+    <div class="input-daterange">
+     <div class="col-md-4">
+      <input autocomplete="off"  class="form-control col-form" name="birthdate" placeholder="birthdate" type="date" value=""
+        min="1900-01-01" max="2022-01-01">
+     </div>
+     <div class="col-md-4">
+      <input autocomplete="off"  class="form-control col-form" name="birthdate" placeholder="birthdate" type="date" value=""
+        min="1900-01-01" max="2022-01-01">
+     </div>      
+    </div>
+    <div class="col-md-4">
+     <input type="button" name="search" id="search" value="Search" class="btn btn-info" />
+    </div>
+   </div>
+  
+    <table id="order_data" class="table table-bordered table-striped">
+      <thead>
+          <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>birthdate</th>
+            <th>salary</th>
+            <th>department</th>
+          </tr>
+        </thead>
+    </table>
+
+    </div>
+  </div>
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+  <script>
+    /* Custom filtering function which will search data in column four between two values */
+
+    $(document).ready(function(){
+ 
+ $('.input-daterange').datepicker({
+  todayBtn:'linked',
+  format: "yyyy-mm-dd",
+  autoclose: true
+ });
+
+ fetch_data('no');
+
+ function fetch_data(is_date_search, start_date='', end_date='')
+ {
+  var dataTable = $('#order_data').DataTable({
+   "processing" : true,
+   "serverSide" : true,
+   "order" : [],
+   "ajax" : {
+    url:"/api/v1/employees",
+    type:"POST",
+    data:{
+     is_date_search:is_date_search, start_date:start_date, end_date:end_date
+    }
+   }
+  });
+ }
+
+ $('#search').click(function(){
+  var start_date = $('#start_date').val();
+  var end_date = $('#end_date').val();
+  if(start_date != '' && end_date !='')
+  {
+   $('#order_data').DataTable().destroy();
+   fetch_data('yes', start_date, end_date);
+  }
+  else
+  {
+   alert("Both Date is Required");
+  }
+ }); 
+ 
+});
+  </script>
+
+{% endblock %}

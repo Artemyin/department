@@ -1,5 +1,6 @@
 .vscode
 __pycache__
-depvenv
+/depvenv
 .pyc
-depenv
+/depenv
+\__pycache__

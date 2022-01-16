@@ -1,5 +1,5 @@
 from marshmallow import ValidationError
-from xmlrpc.client import boolean
+
 from flask_restful import Resource
 from flask import Blueprint, request
 from flask_restful import Api, reqparse
@@ -69,34 +69,13 @@ class EmployeeListAPI(Resource):
         :rtype: [type]
         """
         args = parser.parse_args()
-
-        #errors = employee_schema.validate(args, partial=("department"))
-        #print("errors:", errors)
-        #print("errors", errors.valid_data)
-        #if errors:
-        #    return errors, 400
-        """
-        arguments = (
-            name=args['name'],
-            birthdate=args['birthdate'],
-            salary=args['salary'],
-            department=args['department']
-        )
-        """
-        print(f'arguments: {args=}')    
-             
         try:
             employee = employee_schema.load(args)
-            db.session.add(employee)
-            db.session.commit()
+            employee = employee_service.create(employee=employee)
         except ValidationError as err:
-            print(err.messages)
             return err.messages
-
-        print(f'instance: {employee=}')
-        emp = employee_schema.dump(employee)
-        print('response', emp)
-        return emp, 200
+        employee = employee_schema.dump(employee)
+        return employee, 200
 
 
 class EmployeeAPI(Resource):
@@ -124,14 +103,12 @@ class EmployeeAPI(Resource):
         :rtype: [type]
         """
         args = parser.parse_args()
-        employee = employee_service.update(
-            id=id,
-            name=args['name'],
-            birthdate=args['birthdate'],
-            salary=args['salary'],
-            department=args['department']
-        )
-        print(f'updated {employee=}')
+        try:
+            employee_schema.is_id_exist(id)
+            employee = employee_schema.load(args)
+            employee = employee_service.update(employee=employee, id=id)   
+        except ValidationError as err:
+            return err.messages
         return employee_schema.dump(employee), 200
 
     @staticmethod
@@ -145,12 +122,11 @@ class EmployeeAPI(Resource):
         :return: 204 HTTP status code if sucesfull
         :rtype: HTTP status code
         """
-
         try:
-            
+            employee_schema.is_id_exist(id)
             employee_service.delete(id)
-        except:
-            return 400
+        except ValidationError as err:
+            return err.messages, 400
         else:
             return 204
 

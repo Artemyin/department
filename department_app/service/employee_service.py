@@ -63,48 +63,26 @@ class EmployeeService:
         :raises LookupError: [description]
         :return: [description]
         :rtype: [type]
-        """
-        kwargs['salary'] = int(kwargs.get('salary'))
-        kwargs['birthdate'] = datetime.strptime(kwargs.get('birthdate'), '%Y-%m-%d')
-        if kwargs.get('department'):
-            kwargs['department'] = int(kwargs.get('department')) 
-        else:
-            kwargs['department'] = None
-        print(f'service args: {kwargs}')
-        try:
-            employee = Employee.query.get_or_404(kwargs.pop('id'))
-        except Exception:
-            raise LookupError
-        else:    
-            for key, value in kwargs.items():
-                print(f'employee = {employee}, {key=}, {value=}')
-                setattr(employee, key, value)
-            db.session.commit()
-            return employee
+        """        
+        employee = Employee.query.get_or_404(kwargs.pop('id'))
+        args = kwargs.get('employee')
+        columns = [m.key for m in args.__table__.columns if m.key != 'id']
+        for attr in columns:
+            setattr(employee, attr, args.__getattribute__(attr))
+        db.session.commit()
+        return employee
 
-    def _create(self, **kwargs):
+
+    def create(self, **kwargs):
         """[summary]
 
         :return: [description]
         :rtype: [type]
         """
-        kwargs['salary'] = int(kwargs.get('salary'))
-        kwargs['birthdate'] = datetime.strptime(kwargs.get('birthdate'), '%Y-%m-%d')
-        if kwargs.get('department'):
-            kwargs['department'] = int(kwargs.get('department')) 
-        else:
-            kwargs['department'] = None
-        print(f'service args: {kwargs}')
-        employee = Employee(name=kwargs.get('name'), 
-            birthdate=kwargs.get('birthdate'),
-            salary=kwargs.get('salary'), 
-            department=kwargs.get('department')
-            )
+        employee = kwargs.get('employee')
         db.session.add(employee)
         db.session.commit()
-        print("employyee added")
-        return self.read_by_param(name=kwargs.get('name'))
-
+        return employee
     
 
     def delete(self, id):
@@ -112,17 +90,11 @@ class EmployeeService:
 
         :param id: [description]
         :type id: [type]
-        :raises LookupError: [description]
         :return: [description]
         :rtype: [type]
         """
-        try:
-            employee = Employee.query.get_or_404(id)
-        except Exception:
-            raise LookupError
-        else:
-            print(f'delete {employee}')
-            #db.session.delete(employee)
-            #db.session.commit()
-            return True
+        employee = Employee.query.get(id)
+        db.session.delete(employee)
+        db.session.commit()
+  
 
