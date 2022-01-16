@@ -1,13 +1,11 @@
 .vscode
 __pycache__
 /depvenv
-\.pyc
-/.pyc
+
 /depenv
 \__pycache__
 venv
-pyc
-.pyc
+*.pyc
 Scripts
 Lib
 pyvenv.cfg
