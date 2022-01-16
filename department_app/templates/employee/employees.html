@@ -24,6 +24,7 @@
           <td>Maximum date:</td>
           <td><input autocomplete="off"  class="form-control col-form" id="enddate"  name="enddate" type="date" value=""
             min="1900-01-01" max="2022-01-01"></td>
+          <td><button id="applydate">apply</button></td>
       </tr>
   </tbody></table>
   
@@ -52,8 +53,8 @@
     function( settings, searchData, index, rowData, counter ) {
  
       console.log("run search")
-        var min = parseInt( $('#min').val(), 10 );
-        var max = parseInt( $('#max').val(), 10 );
+        var min = parseInt( $('#startdate').val(), 10 );
+        var max = parseInt( $('#enddate').val(), 10 );
         var salary = parseFloat( data[3] ) || 0; // use data for the age column
         console.log(min, max, salary)
         if ( ( isNaN( min ) && isNaN( max ) ) ||
@@ -103,8 +104,11 @@
       
         });
           // Event listener to the two range filtering inputs to redraw on input
-        $('#min, #max').keyup( function() {
-            console.log("key up")
+        $('#applydate').click( function() {
+          var startdate = document.getElementById('startdate').value;
+          var enddate = document.getElementById('enddate').value;
+          console.log(startdate, enddate)
+            console.log("click table")
             table.draw();
         } );
     });
