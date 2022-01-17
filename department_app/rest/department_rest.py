@@ -56,13 +56,14 @@ class DepartmentAPI(Resource):
         :return: department json and HTTP status code 200 if succesfull
         :rtype: JSON, HTTP status code
         """
-        data = {'id': id}
-        errors = department_schema.validate(data)
-        print("errors", errors)
-        if errors:
-            return errors, 400
-        department = department_service.read_by_param(id=id)[0]
-        return department_schema.dump(department), 200
+        try:
+            department_schema.is_id_exist(id)
+            department = department_service.read_by_param(id=id)[0]
+        except ValidationError as err:
+            return err.messages, 400
+        else:
+            return department_schema.dump(department), 200
+
         
     @staticmethod
     def put(id: int):
@@ -81,7 +82,8 @@ class DepartmentAPI(Resource):
             department = department_service.update(department=department, id=id)   
         except ValidationError as err:
             return err.messages, 400
-        return department_schema.dump(department), 200
+        else:
+            return department_schema.dump(department), 200
 
     @staticmethod        
     def delete(id: int):

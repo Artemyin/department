@@ -39,50 +39,6 @@ class EmployeeListAPI(Resource):
         :rtype: [type]
         """
 
-        """
-        print("call this method")
-        #employees = employee_service.read_all()
-        #return {'data': employee_schema.dump(employees, many=True)}, 200
-        query = Employee.query
-
-
-
-        # daterange
-        start_date_raw = request.args.get('start_date')
-        end_date_raw = request.args.get('end_date')
-
-        if start_date_raw:
-            start_date = datetime.strptime(start_date_raw, '%Y-%m-%d')
-        else:
-            start_date = datetime(1900, 1, 1) 
-
-        if end_date_raw:
-            end_date = datetime.strptime(end_date_raw, '%Y-%m-%d')
-        else:
-            end_date = datetime.now()
-
-        query = query.filter(Employee.birthdate.between(start_date,end_date))
-       
-        # search filter
-        search = request.args.get('search[value]')
-        if search:
-            query = query.filter(Employee.name.like(f'%{search}%'))
-        total_filtered = query.count()
-
-        # pagination
-        start = request.args.get('start', type=int)
-        length = request.args.get('length', type=int)
-        query = query.offset(start).limit(length)
-
-        # response
-        return {
-            'data': employee_schema.dump(query, many=True),
-            'recordsFiltered': total_filtered,
-            'recordsTotal': Employee.query.count(),
-            'draw': request.args.get('draw', type=int), 
-        }
-        """
-
         args = request.args
         employees = employee_service.search(args)
 
@@ -107,8 +63,8 @@ class EmployeeListAPI(Resource):
             employee = employee_service.create(employee=employee)
         except ValidationError as err:
             return err.messages
-        employee = employee_schema.dump(employee)
-        return employee, 200
+        else:
+            return employee_schema.dump(employee), 200
 
 
 class EmployeeAPI(Resource):
@@ -122,8 +78,13 @@ class EmployeeAPI(Resource):
         :return: [description]
         :rtype: [type]
         """
-        employee = employee_service.read_by_param(id=id)[0]
-        return employee_schema.dump(employee), 200
+        try:
+            employee_schema.is_id_exist(id)
+            employee = employee_service.read_by_param(id=id)[0]
+        except ValidationError as err:
+            return err.messages, 404
+        else:
+            return employee_schema.dump(employee), 200
         
 
     @staticmethod
@@ -141,8 +102,9 @@ class EmployeeAPI(Resource):
             employee = employee_schema.load(args)
             employee = employee_service.update(employee=employee, id=id)   
         except ValidationError as err:
-            return err.messages
-        return employee_schema.dump(employee), 200
+            return err.messages, 400
+        else:
+            return employee_schema.dump(employee), 200
 
     @staticmethod
     def delete(id: int):
@@ -159,13 +121,11 @@ class EmployeeAPI(Resource):
             employee_schema.is_id_exist(id)
             employee_service.delete(id)
         except ValidationError as err:
-            return err.messages, 400
+            return err.messages, 404
         else:
             return 204
 
-def data_parse_args(arg):
-    start = arg.get('start', type=int)
-    return start
+
 
 api.add_resource(EmployeeListAPI, '/employees/')
 api.add_resource(EmployeeAPI, '/employees/<int:id>')

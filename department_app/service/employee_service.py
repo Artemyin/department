@@ -1,4 +1,5 @@
 from datetime import datetime
+from collections import namedtuple
 
 from department_app.models import db
 from department_app.models.employee_model import Employee
@@ -94,7 +95,7 @@ class EmployeeService:
         db.session.delete(employee)
         db.session.commit()
 
-    def search(self, args):
+    def search(self, args, department_id=None):
 
         start_date = args.get('start_date')
         end_date = args.get('end_date')
@@ -102,18 +103,28 @@ class EmployeeService:
         start = args.get('start', type=int)
         length = args.get('length', type=int)
         draw = args.get('draw', type=int)
+        get_col_index = lambda i: args.get(f'order[{i}][column]')
+        get_col_name = lambda col_index: args.get(f'columns[{col_index}][data]')
+        get_descending = lambda i: args.get(f'order[{i}][dir]')
 
         query = Employee.query
+        if department_id is not None: # If department specified filter all employee in this dep
+            query = self.read_by_param(department_id=department_id)
         query = self.datarange_filter(query, start_date, end_date)
         query, total_filtered = self.search_filter(query, search)
-        query = self.sort_data(query)
+        query = self.sort_data(query, get_col_index, get_col_name, get_descending)
         query = self.paginate_data(query, start, length)
         recordstotal = Employee.query.count()
 
-        return query, total_filtered, recordstotal, draw
+        result = namedtuple("result", ["query", "total_filtered", "recordstotal", "draw"])
+        return result(
+            query,
+            total_filtered, 
+            recordstotal, 
+            draw
+        )
 
-
-    def datarange_filter(query, start_date, end_date):
+    def datarange_filter(self, query, start_date, end_date):
         if start_date:
             start_date = datetime.strptime(start_date, '%Y-%m-%d')
         else:
@@ -132,8 +143,25 @@ class EmployeeService:
         return query, total_filtered
 
        
-    def sort_data(query):
-      return query
+    def sort_data(self, query, get_col_index, get_col_name, get_descending):
+        order = []
+        i = 0
+        while True:
+            col_index = get_col_index(i)
+            if col_index is None:
+                break
+            col_name = get_col_name(col_index)
+            if col_name not in ['id',  'name', 'birthdate', 'salary',]:
+                col_name = 'name'
+            descending = get_descending(i) == 'desc'
+            col = getattr(Employee, col_name)
+            if descending:
+              col = col.desc()
+            order.append(col)
+            i += 1
+        if order:
+            query = query.order_by(*order)
+        return query
 
     
     def paginate_data(self, query, start, length):
