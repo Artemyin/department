@@ -4,22 +4,24 @@ from . import ma
 
 from department_app.models.department_model import Department
 from department_app.models.employee_model import Employee
-from department_app.models import db
 
 
 class DepartmentField(fields.Nested):
+    """Inherit neseted field for change deserealiaztion(load)
+    behavior. because _schema error. 
 
+    :param fields: [description]
+    :type fields: [type]
+    """
     def _deserialize(self, value, attr, data, partial=None, **kwargs):
         print(f'_deserialize : {value=}, {attr=}, {data=}')
         return value
     
       
 class EmployeeSchema(ma.Schema):
-
     class Meta:
         model = Employee                      
         dateformat = '%Y-%m-%d' 
-            
 
     id = fields.Integer()
     name = fields.String(validate=validate.Length(min=2))

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template, redirect, request, flash, url_for
+from flask import Blueprint, render_template
 
 from department_app.service.employee_service import EmployeeService
 from department_app.service.department_service import DepartmentService

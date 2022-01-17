@@ -3,11 +3,7 @@ from collections import namedtuple
 
 from department_app.models import db
 from department_app.models.employee_model import Employee
-#from department_app.service.department_service import DepartmentService
 
-
-#department_service = DepartmentService()
-#from department_app.service import department_service
 
 class EmployeeService:
     """CRUD service for employee model
