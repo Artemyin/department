@@ -95,8 +95,8 @@ class EmployeeService:
         db.session.delete(employee)
         db.session.commit()
 
-    def search(self, args, department_id=None):
-
+    def search(self, args):
+        department_id=args.get('department_id')
         start_date = args.get('start_date')
         end_date = args.get('end_date')
         search = args.get('search[value]')
@@ -108,7 +108,7 @@ class EmployeeService:
         get_descending = lambda i: args.get(f'order[{i}][dir]')
 
         query = Employee.query
-        if department_id is not None: # If department specified filter all employee in this dep
+        if department_id: # If department specified filter all employee in this dep
             query = self.read_by_param(department_id=department_id)
         query = self.datarange_filter(query, start_date, end_date)
         query, total_filtered = self.search_filter(query, search)
