@@ -1,7 +1,9 @@
 from department_app.models.base import db
 from department_app.models.department_model import Department
+#from department_app.service.employee_service import EmployeeService
 
-
+#employee_service = EmployeeService()
+from department_app.service import employee_service
 
 class DepartmentService:
 
@@ -78,3 +80,9 @@ class DepartmentService:
         db.session.commit()
         return department
 
+
+    def delete_orphans(self, id):
+        department = self.read_by_param(id=id)[0]
+        for employee in department.employee:
+            employee_service.delete(id=employee.id)
+        db.session.commit()

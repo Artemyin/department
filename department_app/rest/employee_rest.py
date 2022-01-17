@@ -38,10 +38,13 @@ class EmployeeListAPI(Resource):
         :return: [description]
         :rtype: [type]
         """
+
+        """
         print("call this method")
         #employees = employee_service.read_all()
         #return {'data': employee_schema.dump(employees, many=True)}, 200
         query = Employee.query
+
 
 
         # daterange
@@ -70,7 +73,6 @@ class EmployeeListAPI(Resource):
         start = request.args.get('start', type=int)
         length = request.args.get('length', type=int)
         query = query.offset(start).limit(length)
-        print(query)
 
         # response
         return {
@@ -79,7 +81,19 @@ class EmployeeListAPI(Resource):
             'recordsTotal': Employee.query.count(),
             'draw': request.args.get('draw', type=int), 
         }
+        """
 
+        args = request.args
+        employees = employee_service.search(args)
+
+        # response
+        return {
+            'data': employee_schema.dump(employees.query, many=True),
+            'recordsFiltered': employees.total_filtered,
+            'recordsTotal': employees.recordstotal,
+            'draw': employees.draw, 
+        }
+    
     @staticmethod
     def post():
         """[summary]
@@ -149,6 +163,9 @@ class EmployeeAPI(Resource):
         else:
             return 204
 
+def data_parse_args(arg):
+    start = arg.get('start', type=int)
+    return start
 
 api.add_resource(EmployeeListAPI, '/employees/')
 api.add_resource(EmployeeAPI, '/employees/<int:id>')

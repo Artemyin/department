@@ -39,7 +39,7 @@ class DepartmentListAPI(Resource):
             department = department_schema.load(args)
             department = employee_service.create(department=department)
         except ValidationError as err:
-            return err.messages
+            return err.messages, 400
         return department_schema.dump(department), 200
         
 
@@ -80,7 +80,7 @@ class DepartmentAPI(Resource):
             department = department_schema.load(args)
             department = department_service.update(department=department, id=id)   
         except ValidationError as err:
-            return err.messages
+            return err.messages, 400
         return department_schema.dump(department), 200
 
     @staticmethod        
@@ -95,12 +95,10 @@ class DepartmentAPI(Resource):
         :rtype: HTTP status code
         """        
         orphan = request.args.get('orphan', type=int)
-        if orphan:
-            department = department_service.read_by_param(id=id)[0]
-            for employee in department.employee:
-                employee_service.delete(id=employee.id)
         try:
             department_schema.is_id_exist(id)
+            if orphan:
+                department_service.delete_orphans(id)
             department_service.delete(id)
         except ValidationError as err:
             return err.messages, 400

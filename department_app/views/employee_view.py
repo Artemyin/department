@@ -34,30 +34,3 @@ def employee(id: int):
     employee = employee_service.read_by_param(id=id)[0]
     return render_template('employee/employee.html', employee=employee)
     
-"""
-@employee_bp.route('/employees/', methods=['POST'])
-def create_employee():
-    data = request.get_json()
-    errors = employee_schema.validate(data)
-    if errors:
-        return jsonify(errors)
-    employee_service.create(**data)
-    return jsonify(status="ok")
-
-
-@employee_bp.route('/employees/<int:id>', methods=['DELETE'])
-def delete_employee(id: int):
-    errors = employee_schema.is_id_exist(id)
-    print("errors:", errors)
-    
-    employee_service.delete(id=id)
-    return redirect('/employees/'), 204
-    
-
-@employee_bp.route('/employees/<int:id>', methods=['PUT'])
-def edit_employee(id: int):
-    data = request.get_json()
-    employee_service.update(id=id, **data)
-    return redirect('/employees/'), 204
-
-"""
