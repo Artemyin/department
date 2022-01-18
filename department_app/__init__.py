@@ -1,7 +1,8 @@
 import os
 from flask import Flask
 
-
+def get_env():
+    return os.environ.get("prod", "dev")
 
 def create_app():
     """[summary]
@@ -10,8 +11,11 @@ def create_app():
         [type]: [description]
     """
     app = Flask(__name__)
-    # env_config = os.getenv("APP_SETTINGS", "config.DevelopmentConfig")
-    env_config = os.getenv("APP_SETTINGS", "config.ProductionConfig")
+    env = get_env()
+    if env == "prod":
+        env_config = os.getenv("APP_SETTINGS", "config.ProductionConfig")
+    else:
+        env_config = os.getenv("APP_SETTINGS", "config.DevelopmentConfig")
     app.config.from_object(env_config)
 
     from . import models, serializers, views, rest
