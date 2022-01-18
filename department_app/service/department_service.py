@@ -1,6 +1,10 @@
 from department_app.models.base import db
 from department_app.models.department_model import Department
-from department_app.service import employee_service
+from department_app.service.employee_service import EmployeeService
+
+
+employee_service = EmployeeService()
+
 
 class DepartmentService:
 

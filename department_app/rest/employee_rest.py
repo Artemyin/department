@@ -20,7 +20,13 @@ parser.add_argument('department', required=True, type=int, default=None)
 
 
 class EmployeeListAPI(Resource):
+    """[summary]
 
+    :param Resource: [description]
+    :type Resource: [type]
+    :return: [description]
+    :rtype: [type]
+    """
     @staticmethod
     def get():
         """[summary]
@@ -56,7 +62,13 @@ class EmployeeListAPI(Resource):
 
 
 class EmployeeAPI(Resource):
+    """[summary]
 
+    :param Resource: [description]
+    :type Resource: [type]
+    :return: [description]
+    :rtype: [type]
+    """
     @staticmethod
     def get(id: int):
         """[summary]
@@ -111,8 +123,7 @@ class EmployeeAPI(Resource):
         except ValidationError as err:
             return err.messages, 404
         else:
-            return 204
-
+            return {'message' : f'employee with {id} deleted sucessfuly'}, 204
 
 
 api.add_resource(EmployeeListAPI, '/employees/')

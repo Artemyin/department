@@ -6,9 +6,6 @@ from department_app.serializers.department_serializer import DepartmentSchema
 department_service = DepartmentService() 
 department_schema = DepartmentSchema()
 
-
-
-# Blueprint Configuration
 department_bp = Blueprint(
     'department_bp', __name__,
     template_folder='templates',

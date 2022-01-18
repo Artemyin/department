@@ -17,7 +17,13 @@ parser.add_argument('name', required=True, help='Name cannot be blank!')
 
 
 class DepartmentListAPI(Resource):
+    """[summary]
 
+    :param Resource: [description]
+    :type Resource: [type]
+    :return: [description]
+    :rtype: [type]
+    """
     @staticmethod
     def get():
         """[summary]
@@ -42,7 +48,13 @@ class DepartmentListAPI(Resource):
         
 
 class DepartmentAPI(Resource):
+    """[summary]
 
+    :param Resource: [description]
+    :type Resource: [type]
+    :return: [description]
+    :rtype: [type]
+    """
     @staticmethod
     def get(id: int):
         """Handle GET request for department/<id>
@@ -103,7 +115,8 @@ class DepartmentAPI(Resource):
         except ValidationError as err:
             return err.messages, 400
         else:
-            return 204
+            return {'message' : f'department with {id} deleted sucessfuly'}, 204
+
 
 api.add_resource(DepartmentListAPI, '/departments/')
 api.add_resource(DepartmentAPI, '/departments/<int:id>')

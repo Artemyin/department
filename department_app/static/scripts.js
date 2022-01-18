@@ -13,8 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {  // open DOM of the p
 		    id = id + '?orphan=0';
 	        }
         }
-        httpDeleteAsync(endpoint, id, e) // call function which send request
-         // remove row from table with deleted data
+        row = e.currentTarget.closest('tr')
+        httpDeleteAsync(endpoint, id, row) // call function which send request
+         
+        
         })
     })
 });
@@ -96,17 +98,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 function make_raw(id, name, salary, count){
 var row_dep_table = `<tr>` +
-            `<td>1</td>`+
-            `<td><a href="/departments/1" id="department_name1">Management</a></td>`+
-            `<td>524.25</td>`+
-            `<td>4</td>`+
+            `<td>${id}</td>`+
+            `<td><a href="/departments/${id}" id="department_name${id}">${name}</a></td>`+
+            `<td>${salary}</td>`+
+            `<td>${count}</td>`+
             `<td></td>`};
 
 function httpDeleteAsync(url, id, e) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 204){
-            e.currentTarget.closest('tr').remove();
+            // remove row from table with deleted data
+            e.remove();
         };
     }
     xmlHttp.open("DELETE", '/api/v1'+url+id, true); // true for asynchronous 
@@ -134,8 +137,8 @@ function httpPostAsync(url, data)
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4){
-            // const response = JSON.parse(xmlHttp.response);
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 204){
+            const response = JSON.parse(xmlHttp.response);
 
         };
     }

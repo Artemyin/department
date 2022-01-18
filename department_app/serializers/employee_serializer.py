@@ -18,6 +18,16 @@ class DepartmentField(fields.Nested):
     
       
 class EmployeeSchema(ma.Schema):
+    """[summary]
+
+    :param ma: [description]
+    :type ma: [type]
+    :raises ValidationError: [description]
+    :raises ValidationError: [description]
+    :raises ValidationError: [description]
+    :return: [description]
+    :rtype: [type]
+    """
     class Meta:
         model = Employee                      
         dateformat = '%Y-%m-%d' 
@@ -31,21 +41,46 @@ class EmployeeSchema(ma.Schema):
 
     @validates("name")
     def is_name_exist(self, name):
+        """[summary]
+
+        :param name: [description]
+        :type name: [type]
+        :raises ValidationError: [description]
+        """
         query = Employee.query.filter(Employee.name.like(f'%{name}%')).all()
         if name.lower() in [employee.name.lower() for employee in query]:
             raise ValidationError("This name already exist in DB")
 
     @validates("id")
     def is_id_exist(self, id):
+        """[summary]
+
+        :param id: [description]
+        :type id: [type]
+        :raises ValidationError: [description]
+        """
         if not Employee.query.filter_by(id=id).all():
             raise ValidationError("There is no id in DB")
 
     @validates("department")
     def is_department_exist(self, id):
+        """[summary]
+
+        :param id: [description]
+        :type id: [type]
+        :raises ValidationError: [description]
+        """
         if not Department.query.filter_by(id=id).all():
             raise ValidationError("There is no department id in DB")
 
     @post_load
     def make_employee(self, data, **kwargs):
+        """[summary]
+
+        :param data: [description]
+        :type data: [type]
+        :return: [description]
+        :rtype: [type]
+        """
         return Employee(**data)
                

@@ -5,6 +5,7 @@ from department_app.models import db
 from department_app.models.employee_model import Employee
 
 
+
 class EmployeeService:
     """CRUD service for employee model
 
