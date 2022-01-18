@@ -41,8 +41,6 @@ class EmployeeListAPI(Resource):
 
         args = request.args
         employees = employee_service.search(args)
-
-        # response
         return {
             'data': employee_schema.dump(employees.query, many=True),
             'recordsFiltered': employees.total_filtered,
