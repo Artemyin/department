@@ -10,7 +10,8 @@ def create_app():
         [type]: [description]
     """
     app = Flask(__name__)
-    env_config = os.getenv("APP_SETTINGS", "config.DevelopmentConfig")
+    # env_config = os.getenv("APP_SETTINGS", "config.DevelopmentConfig")
+    env_config = os.getenv("APP_SETTINGS", "config.ProductionConfig")
     app.config.from_object(env_config)
 
     from . import models, serializers, views, rest
