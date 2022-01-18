@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Employee
+{% endblock %}
+
+{% block main %}
+Info about department:
+
+<div>
+{% with employee=employee %}
+    {% include "employee/edit_employee_modal.html" %}
+{% endwith %}
+</div>
+<div>
+{% with employee=employee %}
+    {% include "employee/delete_employee_modal.html" %}
+{% endwith %}  
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>birthdate</th>
+            <th>salary</th>
+            <th>department</th>
+        <tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ employee.id }}</td>
+            <td id="employee_name{{ employee.id }}">{{ employee.name }}</td>
+            <td>{{ employee.birthdate }}</td>
+            <td>{{ employee.salary }}</td>
+            <td>{{ employee.department }}</td>
+            
+        </tr>
+    </tbody>
+</table>
+
+
+{% endblock %}

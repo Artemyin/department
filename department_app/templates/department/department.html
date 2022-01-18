@@ -12,6 +12,11 @@ Info about department:
     {% include "department/edit_department_modal.html" %}
 {% endwith %}
 </div>
+<div>
+{% with id=department.id, name=department.name, employee=department.employee %}
+    {% include "department/delete_department_modal.html" %}
+{% endwith %}
+</div>
 <table class="table">
     <thead>
         <tr>

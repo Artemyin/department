@@ -12,3 +12,4 @@ department_db
 **/*.pyc
 **\*.pyc
 *.cpython-39.pyc
+department_app/department_db
