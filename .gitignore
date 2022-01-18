@@ -3,12 +3,12 @@ __pycache__
 /depvenv
 Include
 /depenv
-
 venv
 *.pyc
 Scripts
 Lib
 pyvenv.cfg
 department_db
-
+**/*.pyc
+**\*.pyc
 *.cpython-39.pyc
