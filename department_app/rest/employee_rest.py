@@ -1,16 +1,9 @@
-from datetime import datetime
 from marshmallow import ValidationError
-
-from flask_restful import Resource
+from flask_restful import Resource, Api, reqparse
 from flask import Blueprint, request
-from flask_restful import Api, reqparse
+
 from department_app.service.employee_service import EmployeeService
 from department_app.serializers.employee_serializer import EmployeeSchema
-
-
-
-
-from department_app.models import db
 
 
 employee_service = EmployeeService()
@@ -18,9 +11,6 @@ employee_schema = EmployeeSchema()
 
 api_employee_bp = Blueprint('employee_api', __name__)
 api = Api(api_employee_bp)
-
-
-from department_app.models.employee_model import Employee
 
 parser = reqparse.RequestParser()
 parser.add_argument('name', required=True, help='Name cannot be blank!')
@@ -30,7 +20,13 @@ parser.add_argument('department', required=True, type=int, default=None)
 
 
 class EmployeeListAPI(Resource):
+    """[summary]
 
+    :param Resource: [description]
+    :type Resource: [type]
+    :return: [description]
+    :rtype: [type]
+    """
     @staticmethod
     def get():
         """[summary]
@@ -41,8 +37,6 @@ class EmployeeListAPI(Resource):
 
         args = request.args
         employees = employee_service.search(args)
-
-        # response
         return {
             'data': employee_schema.dump(employees.query, many=True),
             'recordsFiltered': employees.total_filtered,
@@ -68,7 +62,13 @@ class EmployeeListAPI(Resource):
 
 
 class EmployeeAPI(Resource):
+    """[summary]
 
+    :param Resource: [description]
+    :type Resource: [type]
+    :return: [description]
+    :rtype: [type]
+    """
     @staticmethod
     def get(id: int):
         """[summary]
@@ -123,8 +123,7 @@ class EmployeeAPI(Resource):
         except ValidationError as err:
             return err.messages, 404
         else:
-            return 204
-
+            return {'message' : f'employee with {id} deleted sucessfuly'}, 204
 
 
 api.add_resource(EmployeeListAPI, '/employees/')

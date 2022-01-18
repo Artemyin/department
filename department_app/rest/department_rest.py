@@ -1,16 +1,13 @@
 from marshmallow import ValidationError
-from flask_restful import Resource
+from flask_restful import Resource, Api, reqparse
 from flask import Blueprint, request
-from flask_restful import Api, reqparse
-import requests
+
 from department_app.service.department_service import DepartmentService
 from department_app.serializers.department_serializer import DepartmentSchema
 
+
 department_service = DepartmentService()
 department_schema = DepartmentSchema()
-
-from department_app.service.employee_service import EmployeeService
-employee_service = EmployeeService()
 
 api_department_bp = Blueprint('departemnt_api', __name__)
 api = Api(api_department_bp)
@@ -18,8 +15,15 @@ api = Api(api_department_bp)
 parser = reqparse.RequestParser()
 parser.add_argument('name', required=True, help='Name cannot be blank!')
 
-class DepartmentListAPI(Resource):
 
+class DepartmentListAPI(Resource):
+    """[summary]
+
+    :param Resource: [description]
+    :type Resource: [type]
+    :return: [description]
+    :rtype: [type]
+    """
     @staticmethod
     def get():
         """[summary]
@@ -37,14 +41,20 @@ class DepartmentListAPI(Resource):
         args = parser.parse_args()
         try:
             department = department_schema.load(args)
-            department = employee_service.create(department=department)
+            department = department_service.create(department=department)
         except ValidationError as err:
             return err.messages, 400
         return department_schema.dump(department), 200
         
 
 class DepartmentAPI(Resource):
+    """[summary]
 
+    :param Resource: [description]
+    :type Resource: [type]
+    :return: [description]
+    :rtype: [type]
+    """
     @staticmethod
     def get(id: int):
         """Handle GET request for department/<id>
@@ -105,7 +115,8 @@ class DepartmentAPI(Resource):
         except ValidationError as err:
             return err.messages, 400
         else:
-            return 204
+            return {'message' : f'department with {id} deleted sucessfuly'}, 204
+
 
 api.add_resource(DepartmentListAPI, '/departments/')
 api.add_resource(DepartmentAPI, '/departments/<int:id>')

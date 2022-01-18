@@ -5,8 +5,12 @@ from department_app.models.department_model import Department
 from .base import db
 
 class Employee(db.Model):
-    """Employee model.
+    """[summary]
 
+    :param db: [description]
+    :type db: [type]
+    :return: [description]
+    :rtype: [type]
     """
     __tablename__ = 'employee'
 

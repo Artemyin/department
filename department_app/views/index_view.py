@@ -1,10 +1,6 @@
-from os import name
-from flask import Blueprint, jsonify,  render_template
-
-from department_app.views.department_view import department
+from flask import Blueprint, render_template
 
 
-# Blueprint Configuration
 index_bp = Blueprint(
     'index_bp', __name__,
     template_folder='templates',

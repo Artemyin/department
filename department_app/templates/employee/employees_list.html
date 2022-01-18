@@ -1,57 +1,97 @@
 {% block employees_list %}
+
 <div class="container">
     <h1>{{ title }}</h1>
     <hr>
- <table id="table-data" class="table table-striped">
-    <thead>
-        <tr>
+    <table cellspacing="5" cellpadding="5" border="0">
+      <tbody><tr>
+          <td>Minimum date:</td>
+          <td><input autocomplete="off"  class="form-control col-form" id="startdate"  name="startdate" type="date" value=""
+            min="1900-01-01" max="2022-01-01"></td>
+      
+          <td>Maximum date:</td>
+          <td><input autocomplete="off"  class="form-control col-form" id="enddate"  name="enddate" type="date" value=""
+            min="1900-01-01" max="2022-01-01"></td>
+          <td><button id="applydate" class="btn btn-sm btn-primary">apply</button></td>
+      </tr>
+  </tbody></table>
+  <table id="data" class="table table-striped">
+        <thead>
+          <tr>
             <th>id</th>
             <th>name</th>
             <th>birthdate</th>
             <th>salary</th>
             <th>department</th>
             <th>actions</th>
-        <tr>
-    </thead>
-    <tbody>
-        {% for employee in employees %}
-        <tr>
-            <td>{{ employee.id }}</td>
-            <td>{{ employee.name }}</td>
-            <td>{{ employee.birthdate }}</td>
-            <td>{{ employee.salary }}</td>
-            <td>
-                {% if employee.department.id %}
-                <a href="/departments/{{ employee.department.id }}">
-                    {{ employee.department }}
-                </a>
-                {% else %}
-                    {{ employee.department }}
-                {% endif %}
-                
-            </td>
-            <td>
-            <div>{% with employee=employee, departments=departments %}
-                    {% include "employee/edit_employee_modal.html" %}
-            {% endwith %}</div>
-            
-            {% if department %}
-                <button class="btn btn-sm btn-danger">
-                    exclude
-                </button>
-            {% else %}
-            <div>
-                {% with employee=employee  %}
-                    {% include "employee/delete_employee_modal.html" %}
-                {% endwith %}
-            </div>
-            {% endif %}
-            </td>
-            
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-</div>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+  </table>
+    
+  </div>
 
+<script>
+$(document).ready(function () 
+{
+  var start_date = document.getElementById('startdate').value;
+  var end_date = document.getElementById('enddate').value;
+  fetch_data(start_date, end_date)
+  function fetch_data(start_date, end_date)
+  {
+    var table = $('#data').DataTable(
+    {
+      ajax: 
+      {
+        url: '/api/v1/employees',
+        data:{
+          start_date: start_date,
+          end_date: end_date,
+          department_id: '{{ department_id }}'
+        },
+      },
+      serverSide: true,
+      columns: [
+        {data: 'id'},
+        {data: 'name'},
+        {data: 'birthdate', searchable: false},
+        {data: 'salary'},
+        {data: 'department', 
+            searchable: false,
+            defaultContent: "None", 
+            "render": function(data, type, row, meta)
+            {
+              if (data != null) {
+              return '<a href="/departments/' + data.id + '">' + data.name + '</a>';
+              } else {
+              return "None"
+              }
+            }
+        },
+        {data: 'id',
+            "render": function ( data, type, row, meta){
+              // console.log(`<div class='employee button' id='employee button${data}'></div>`)
+              return `<div class='employee button' id='employee button ${data}'>${data}</div>`;
+            }
+        },
+      ],    
+    });
+  }
+  // Event listener to the two range filtering inputs to redraw on input
+  $('#applydate').click( function()
+  {
+    start_date = document.getElementById('startdate').value;
+    end_date = document.getElementById('enddate').value;
+    $('#data').DataTable().destroy();
+    fetch_data(start_date, end_date);
+  });
+  // document.addEventListener('DOMContentLoaded', function() {
+  // const employee_button = document.querySelectorAll('.employee button')
+  // Array.prototype.forEach.call(employee_button, (item) => {
+  //   console.log('some')
+  // });
+  // });
+});
+</script>
 {% endblock %}

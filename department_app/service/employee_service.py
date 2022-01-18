@@ -5,6 +5,7 @@ from department_app.models import db
 from department_app.models.employee_model import Employee
 
 
+
 class EmployeeService:
     """CRUD service for employee model
 
@@ -105,7 +106,7 @@ class EmployeeService:
 
         query = Employee.query
         if department_id: # If department specified filter all employee in this dep
-            query = self.read_by_param(department_id=department_id)
+            query = query.filter_by(department_id=department_id)
         query = self.datarange_filter(query, start_date, end_date)
         query, total_filtered = self.search_filter(query, search)
         query = self.sort_data(query, get_col_index, get_col_name, get_descending)
