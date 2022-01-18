@@ -53,6 +53,7 @@ class EmployeeListAPI(Resource):
         """
         args = parser.parse_args()
         try:
+            print(args)
             employee = employee_schema.load(args)
             employee = employee_service.create(employee=employee)
         except ValidationError as err:

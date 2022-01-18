@@ -55,7 +55,10 @@ $(document).ready(function ()
       columns: [
         {data: 'id'},
         {data: 'name',
- 
+              "render": function ( data, type, row, meta){
+              console.log(data, type, row.id, row.name)
+              return '<a href="/employees/' + row.id + '">' + row.name + '</a>';
+            }
         },
         {data: 'birthdate', searchable: false},
         {data: 'salary'},
@@ -73,8 +76,8 @@ $(document).ready(function ()
         },
         {data: 'id',
             "render": function ( data, type, row, meta){
-              // console.log(`<div class='employee button' id='employee button${data}'></div>`)
-              return `<div class='employee button' id='employee button ${data}'>${data}</div>`;
+              console.log(data, type, row, meta)
+              return `<div class='employee button' id='employee button ${data}'>soon will be avalible</div>`;
             }
         },
       ],    

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-Info about department:
+Info about employee:
 
 <div>
 {% with employee=employee %}
@@ -33,7 +33,7 @@ Info about department:
             <td id="employee_name{{ employee.id }}">{{ employee.name }}</td>
             <td>{{ employee.birthdate }}</td>
             <td>{{ employee.salary }}</td>
-            <td>{{ employee.department }}</td>
+            <td><a href='/departments/{{ employee.department.id }}'>{{ employee.department }}</a></td>
             
         </tr>
     </tbody>
