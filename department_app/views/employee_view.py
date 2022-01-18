@@ -1,3 +1,4 @@
+from marshmallow import ValidationError
 from flask import Blueprint, render_template
 
 from department_app.service.employee_service import EmployeeService
@@ -40,6 +41,12 @@ def employee(id: int):
     :return: [description]
     :rtype: [type]
     """
-    employee = employee_service.read_by_param(id=id)[0]
-    return render_template('employee/employee.html', employee=employee)
+    try:
+        employee_schema.is_id_exist(id)
+        employee = employee_service.read_by_param(id=id)[0]
+        departments = department_service.read_all()
+    except ValidationError as err:
+        return err.messages, 404
+    else:
+        return render_template('employee/employee.html', employee=employee, departments=departments)
     

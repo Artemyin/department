@@ -1,3 +1,4 @@
+from marshmallow import ValidationError
 from flask import Blueprint, render_template
 from department_app.service.department_service import DepartmentService
 from department_app.serializers.department_serializer import DepartmentSchema
@@ -35,7 +36,12 @@ def department(id: int):
             and departments for select html element
     :rtype: render_template()
     """
-    department = department_service.read_by_param(id=id)[0]
-    departments = department_service.read_all()
-    return render_template('department/department.html', departments=departments, department=department)
+    try:
+        department_schema.is_id_exist(id)
+        department = department_service.read_by_param(id=id)[0]
+        departments = department_service.read_all()
+    except ValidationError as err:
+        return err.messages, 400
+    else:
+        return render_template('department/department.html', departments=departments, department=department)
     

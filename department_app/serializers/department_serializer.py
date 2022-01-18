@@ -34,7 +34,7 @@ class DepartmentSchema(ma.Schema):
         """
         query = Department.query.filter(Department.name.like(f'%{name}%')).all()
         if name.lower() in [department.name.lower() for department in query]:
-            raise ValidationError("This name already exist in DB")
+            raise ValidationError('This name already exist in DB')
 
     @validates("id")
     def is_id_exist(self, id):
@@ -45,7 +45,7 @@ class DepartmentSchema(ma.Schema):
         :raises ValidationError: [description]
         """
         if not Department.query.filter_by(id=id).all():
-            raise ValidationError("There is not id in DB")
+            raise ValidationError('There is not id in DB')
 
     @post_load
     def make_department(self, data, **kwargs):

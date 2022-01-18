@@ -109,7 +109,12 @@ function httpDeleteAsync(url, id, e) {
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 204){
             // remove row from table with deleted data
-            e.remove();
+            
+            if (window.location.href != url){
+                window.location.replace(url);
+            } else {
+                e.remove();
+            }
         };
     }
     xmlHttp.open("DELETE", '/api/v1'+url+id, true); // true for asynchronous 
@@ -120,12 +125,17 @@ function httpDeleteAsync(url, id, e) {
 function httpPutAsync(url, id, data, callback) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 ){
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
             const response = JSON.parse(xmlHttp.response);
             console.log("new", response.name)
             const department_name = document.getElementById('department_name'+response.id);
             department_name.textContent = response.name;
-        };
+        } if (xmlHttp.readyState == 4 && xmlHttp.status == 400) {
+            const response = JSON.parse(xmlHttp.response);
+            console.log("new", response)
+            alert(response)
+        }
+        ;
     }
     xmlHttp.open("PUT", '/api/v1'+url+id, true); // true for asynchronous 
     xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -133,13 +143,13 @@ function httpPutAsync(url, id, data, callback) {
 };
 
 
-function httpPostAsync(url, data)
+function httpPostAsync(url, data, e)
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 204){
-            const response = JSON.parse(xmlHttp.response);
-
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+            // const response = JSON.parse(xmlHttp.response);
+            document.location.reload(true)
         };
     }
     xmlHttp.open("POST", '/api/v1'+url, true); // true for asynchronous 
