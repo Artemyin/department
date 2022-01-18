@@ -1,22 +1,20 @@
 from marshmallow import ValidationError
-from flask_restful import Resource
+from flask_restful import Resource, Api, reqparse
 from flask import Blueprint, request
-from flask_restful import Api, reqparse
-import requests
+
 from department_app.service.department_service import DepartmentService
 from department_app.serializers.department_serializer import DepartmentSchema
 
+
 department_service = DepartmentService()
 department_schema = DepartmentSchema()
-
-from department_app.service.employee_service import EmployeeService
-employee_service = EmployeeService()
 
 api_department_bp = Blueprint('departemnt_api', __name__)
 api = Api(api_department_bp)
 
 parser = reqparse.RequestParser()
 parser.add_argument('name', required=True, help='Name cannot be blank!')
+
 
 class DepartmentListAPI(Resource):
 

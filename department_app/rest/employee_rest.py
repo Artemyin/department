@@ -1,16 +1,9 @@
-from datetime import datetime
 from marshmallow import ValidationError
-
-from flask_restful import Resource
+from flask_restful import Resource, Api, reqparse
 from flask import Blueprint, request
-from flask_restful import Api, reqparse
+
 from department_app.service.employee_service import EmployeeService
 from department_app.serializers.employee_serializer import EmployeeSchema
-
-
-
-
-from department_app.models import db
 
 
 employee_service = EmployeeService()
@@ -18,9 +11,6 @@ employee_schema = EmployeeSchema()
 
 api_employee_bp = Blueprint('employee_api', __name__)
 api = Api(api_employee_bp)
-
-
-from department_app.models.employee_model import Employee
 
 parser = reqparse.RequestParser()
 parser.add_argument('name', required=True, help='Name cannot be blank!')
