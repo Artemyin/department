@@ -1,1 +1,1 @@
-web: gunicorn wsgi:app
+web: sh setup.sh && gunicorn wsgi:app

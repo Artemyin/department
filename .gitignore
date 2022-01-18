@@ -5,6 +5,7 @@ Include
 /depenv
 venv
 *.pyc
+*.log
 Scripts
 Lib
 pyvenv.cfg
