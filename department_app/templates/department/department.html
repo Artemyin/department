@@ -17,14 +17,17 @@ Info about department:
         <tr>
             <th>id</th>
             <th>name</th>
+            <th>average salary</th>
             <th>employees</th>
         <tr>
     </thead>
     <tbody>
         <tr>
             <td>{{ department.id }}</td>
-            <td>{{ department.name }}</td>
+            <td id="department_name{{ department.id }}">{{ department.name }}</td>
+            <td>{{ department.average_salary }}</td>
             <td>{{ department.employee | length }}</td>
+            
         </tr>
     </tbody>
 </table>
@@ -35,7 +38,7 @@ Employees of department
 {% endwith %}
 </div>
 <div>
-{% with employees=department.employee, department=True %}
+{% with department_id = department.id %}
     {% include "employee/employees_list.html" %}
 {% endwith %}
 </div>

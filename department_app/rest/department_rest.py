@@ -37,7 +37,7 @@ class DepartmentListAPI(Resource):
         args = parser.parse_args()
         try:
             department = department_schema.load(args)
-            department = employee_service.create(department=department)
+            department = department_service.create(department=department)
         except ValidationError as err:
             return err.messages, 400
         return department_schema.dump(department), 200

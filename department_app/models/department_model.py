@@ -15,6 +15,13 @@ class Department(db.Model):
     name = db.Column(db.String(100), unique=True, nullable=False)
     employee = db.relationship('Employee', back_populates="department")
     
+    @property
+    def average_salary(self):
+        try:
+            return round(sum(employee.salary for employee in self.employee)/len(self.employee), 2)
+        except ZeroDivisionError:
+            return 0
+
     def __repr__(self) -> str:
         """[summary]
 

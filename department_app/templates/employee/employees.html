@@ -6,112 +6,15 @@
 
 {% block main %}
 <span>
-    Employees 
+Employees 
 {% with departments=departments, department=None %}
     {% include "employee/add_employee_modal.html" %}
 {% endwith %}
 </span>
-{{ employees[0].department }}
-<div class="container">
-    <h1>{{ title }}</h1>
-    <hr>
-    <table cellspacing="5" cellpadding="5" border="0">
-      <tbody><tr>
-          <td>Minimum date:</td>
-          <td><input autocomplete="off"  class="form-control col-form" id="startdate"  name="startdate" type="date" value=""
-            min="1900-01-01" max="2022-01-01"></td>
-      
-          <td>Maximum date:</td>
-          <td><input autocomplete="off"  class="form-control col-form" id="enddate"  name="enddate" type="date" value=""
-            min="1900-01-01" max="2022-01-01"></td>
-          <td><button id="applydate">apply</button></td>
-      </tr>
-  </tbody></table>
-  
-  <table id="data" class="table table-striped">
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>birthdate</th>
-            <th>salary</th>
-            <th>department</th>
-            <th>actions</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-  </table>
-    
-  </div>
-  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
-  <script>
-    /* Custom filtering function which will search data in column four between two values */
-
-    $(document).ready(function () {
-          // var startdate = document.getElementById('startdate').value;
-        console.log("run table")
-         var start_date = document.getElementById('startdate').value;
-
-        var end_date = document.getElementById('enddate').value;
+{% with employees=employees %}
+    {% include "employee/employees_list.html" %}
+{% endwith %}
 
 
-        fetch_data(start_date, end_date)
-
-        function fetch_data(start_date, end_date)
-          {
-        var table = $('#data').DataTable({
-        ajax: {
-          url: '/api/v1/employees',
-          data:{
-          start_date: start_date,
-          end_date: end_date,
-          },
-        },
-        serverSide: true,
-        
-        columns: [
-        {data: 'id'},
-        {data: 'name'},
-        {data: 'birthdate', searchable: false},
-        {data: 'salary'},
-        {data: 'department', searchable: false,
-        defaultContent: "None", 
-        "render": function ( data, type, row, meta){
-            // console.log(data)
-            if (data != null) {
-              return '<a href="/departments/' + data.id + '">' + data.name + '</a>';
-            } else {
-              return "None"
-            }
-        }},
-        {data: 'id',
-        "render": function ( data, type, row, meta){
-          // console.log(data)
-        return '{{ employees[0].department }}';
-             }
-        } ,
-        ],
-      
-        });
-          }
-        // Event listener to the two range filtering inputs to redraw on input
-        $('#applydate').click( function() {
-          console.log("inside click" , start_date, end_date)
-          start_date = document.getElementById('startdate').value;
-
-          end_date = document.getElementById('enddate').value;
-          console.log("inside click2 ", start_date, end_date)
-            console.log("click table")
-            
-            // table.draw();
-            $('#data').DataTable().destroy();
-            fetch_data(start_date, end_date);
-        } );
-
-    });
-  </script>
 
 {% endblock %}

@@ -5,6 +5,7 @@ from department_app.service import employee_service
 class DepartmentService:
 
     def read_all(self):
+
         departments = Department.query.all()
         return departments
 

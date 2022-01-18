@@ -14,17 +14,12 @@ class DepartmentSchema(ma.Schema):
     id = fields.Integer()
     name = fields.String()
     employee = fields.Nested(EmployeeSchema(exclude=("department",)), many=True)
-    average_salary = fields.Method('calculate_average_salary')
-
-    def calculate_average_salary(self, department):
-        try:
-            return round(sum(employee.salary for employee in department.employee)/len(department.employee), 2)
-        except ZeroDivisionError:
-            return 0
+    average_salary = fields.Float(dump_only=True)
 
     @validates("name")
     def is_name_exist(self, name):
-        if Department.query.filter_by(name=name).all():
+        query = Department.query.filter(Department.name.like(f'%{name}%')).all()
+        if name.lower() in [department.name.lower() for department in query]:
             raise ValidationError("This name already exist in DB")
 
     @validates("id")

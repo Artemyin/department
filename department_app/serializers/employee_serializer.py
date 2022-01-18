@@ -1,4 +1,4 @@
-from marshmallow import fields, validates, ValidationError, validate, post_load, pre_load
+from marshmallow import fields, validates, ValidationError, validate, post_load
 
 from . import ma
 
@@ -14,7 +14,6 @@ class DepartmentField(fields.Nested):
     :type fields: [type]
     """
     def _deserialize(self, value, attr, data, partial=None, **kwargs):
-        print(f'_deserialize : {value=}, {attr=}, {data=}')
         return value
     
       
@@ -32,26 +31,21 @@ class EmployeeSchema(ma.Schema):
 
     @validates("name")
     def is_name_exist(self, name):
-        print("is_name_exist checked")
-        if Employee.query.filter_by(name=name).all():
+        query = Employee.query.filter(Employee.name.like(f'%{name}%')).all()
+        if name.lower() in [employee.name.lower() for employee in query]:
             raise ValidationError("This name already exist in DB")
 
     @validates("id")
     def is_id_exist(self, id):
-        print("is_id_exist checked")
         if not Employee.query.filter_by(id=id).all():
             raise ValidationError("There is no id in DB")
 
     @validates("department")
     def is_department_exist(self, id):
-        print("is_department_exist checked")
         if not Department.query.filter_by(id=id).all():
             raise ValidationError("There is no department id in DB")
 
     @post_load
     def make_employee(self, data, **kwargs):
         return Employee(**data)
-
-
-
                
