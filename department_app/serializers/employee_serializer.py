@@ -40,7 +40,7 @@ class EmployeeSchema(ma.Schema):
         allow_none=True, default=None, )
 
     @validates("name")
-    def is_name_exist(self, name):
+    def is_name_exist(self, name: str):
         """[summary]
 
         :param name: [description]
@@ -52,7 +52,7 @@ class EmployeeSchema(ma.Schema):
             raise ValidationError("This name already exist in DB")
 
     @validates("id")
-    def is_id_exist(self, id):
+    def is_id_exist(self, id: int):
         """[summary]
 
         :param id: [description]
@@ -63,13 +63,15 @@ class EmployeeSchema(ma.Schema):
             raise ValidationError("There is no id in DB")
 
     @validates("department")
-    def is_department_exist(self, id):
+    def is_department_exist(self, id: int):
         """[summary]
 
         :param id: [description]
         :type id: [type]
         :raises ValidationError: [description]
         """
+        if id is None:
+            return
         if not Department.query.filter_by(id=id).all():
             raise ValidationError("There is no department id in DB")
 

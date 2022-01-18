@@ -91,8 +91,7 @@ class DepartmentAPI(Resource):
             department = department_schema.load(args)
             department = department_service.update(department=department, id=id)   
         except ValidationError as err:
-            print(err.messages)
-            return {"errors": err.messages}, 400
+            return err.messages, 400
         else:
             return department_schema.dump(department), 200
 

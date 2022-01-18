@@ -15,8 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {  // open DOM of the p
         }
         row = e.currentTarget.closest('tr')
         httpDeleteAsync(endpoint, id, row) // call function which send request
-         
-        
         })
     })
 });
@@ -49,8 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         const jsondata = JSON.stringify(data)
         httpPutAsync(endpoint, id, jsondata)
-
-        // document.location.reload(true)
         })
     })
 });
@@ -65,16 +61,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const data = {"name": name}
         const jsondata = JSON.stringify(data)
         httpPostAsync('/departments/', jsondata)
-        document.location.reload(true)
-        // e.preventDefault();
-    });
+        });
     }
 });
     
     
 document.addEventListener('DOMContentLoaded', function() {
     const AddEmpItems = document.querySelector('#AddEmpButton');
-
     AddEmpItems.addEventListener('click', (e) => { 
         const form = document.querySelector('#AddEmp')
         const name = form.elements['name'].value  
@@ -92,8 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         const jsondata = JSON.stringify(data)
         httpPostAsync('/employees/', jsondata)
-
-        // document.location.reload(true)
     });
 });
 function make_raw(id, name, salary, count){
@@ -102,14 +93,17 @@ var row_dep_table = `<tr>` +
             `<td><a href="/departments/${id}" id="department_name${id}">${name}</a></td>`+
             `<td>${salary}</td>`+
             `<td>${count}</td>`+
-            `<td></td>`};
+            `<td></td>`
+        `<tr>`};
 
 function httpDeleteAsync(url, id, e) {
-    var xmlHttp = new XMLHttpRequest();
+    const xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 204){
             // remove row from table with deleted data
-            
+            const response = xmlHttp.response;
+            console.log("new", response)
+            alert(response)
             if (window.location.href != url){
                 window.location.replace(url);
             } else {
@@ -123,19 +117,15 @@ function httpDeleteAsync(url, id, e) {
 
 
 function httpPutAsync(url, id, data, callback) {
-    var xmlHttp = new XMLHttpRequest();
+    const xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
             const response = JSON.parse(xmlHttp.response);
-            console.log("new", response.name)
             const department_name = document.getElementById('department_name'+response.id);
             department_name.textContent = response.name;
         } if (xmlHttp.readyState == 4 && xmlHttp.status == 400) {
-            const response = JSON.parse(xmlHttp.response);
-            console.log("new", response)
-            alert(response)
-        }
-        ;
+            alert(`error: ${xmlHttp.response}`)
+        };
     }
     xmlHttp.open("PUT", '/api/v1'+url+id, true); // true for asynchronous 
     xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -145,15 +135,17 @@ function httpPutAsync(url, id, data, callback) {
 
 function httpPostAsync(url, data, e)
 {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-            // const response = JSON.parse(xmlHttp.response);
-            document.location.reload(true)
-        };
-    }
+    const xmlHttp = new XMLHttpRequest();
     xmlHttp.open("POST", '/api/v1'+url, true); // true for asynchronous 
     xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlHttp.send(data);
+    xmlHttp.onload = function() {
+        if (xmlHttp.status != 200) {
+            alert(`error: ${xmlHttp.response}`)
+        } else {
+            document.location.reload(true);
+        }
+    };
+
 };
 
