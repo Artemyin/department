@@ -2,12 +2,12 @@ from .base import db
 
 
 class Department(db.Model):
-    """[summary]
+    """Department orm model
 
-    :param db: [description]
-    :type db: [type]
-    :return: [description]
-    :rtype: [type]
+    :columns: 
+        * id: primary key,
+        * name: string,
+        * employees: list[Employee] relationship with Employee table,
     """
     __tablename__ = 'department'
 
@@ -16,11 +16,11 @@ class Department(db.Model):
     employee = db.relationship('Employee', back_populates="department")
     
     @property
-    def average_salary(self):
-        """[summary]
+    def average_salary(self) -> float:
+        """Departmen's employees average salary property
 
-        :return: [description]
-        :rtype: [type]
+        :return: department's demployees average salary 
+        :rtype: float
         """
         try:
             return round(sum(employee.salary for employee in self.employee)/(1 or len(self.employee)), 2)
@@ -28,17 +28,18 @@ class Department(db.Model):
             return 0
 
     def __repr__(self) -> str:
-        """[summary]
+        """beautiful representation info 
+        about department.
 
-        :return: [description]
+        :return: name of department
         :rtype: str
         """
         return f'{self.name}'
     
     def __init__(self, name: str):
-        """[summary]
+        """Department model constructor.
 
-        :param name: [description]
+        :param name: Department's name
         :type name: str
         """
         self.name = name

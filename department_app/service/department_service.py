@@ -7,32 +7,32 @@ employee_service = EmployeeService()
 
 
 class DepartmentService:
+    """CRUD service for department model
 
-    def read_all(self):
-        """[summary]
+    implement service database layer, via
+    create, read, update, delete methods. 
 
-        :return: [description]
-        :rtype: [type]
+    :methods: 
+        * get_all(),
+        * get_by_param(**kwargs),
+        * create(**kwargs),
+        * update(**kwargs),
+        * delete(id),
+    """
+
+    def read_all(self) -> list[Department]:
+        """Get all Departments from DB
+        and return in list.
+
+        :return: all departments
+        :rtype: list[Department]
         """
         departments = Department.query.all()
         return departments
 
 
-    def read_by_param(self, **kwargs):
-        """[summary]
-
-        :return: [description]
-        :rtype: [type]
-        """
-        departments = Department.query.filter_by(**kwargs).all()
-        return departments
-         
-
-    def create(self, **kwargs) -> Department:
-        """Create new department with
-        passed parameters. 
-        if department with same name exist 
-        this method return False
+    def read_by_param(self, **kwargs) -> list[Department]:
+        """Return filtred list of Departments
 
         :param \**kwargs:
             see below
@@ -43,8 +43,27 @@ class DepartmentService:
             * *name* (``str``) --
               department name
 
-        :return: created Department or False if cannot create department with this name
-        :rtype: Department | bool
+
+        :return: filtred departments
+        :rtype: list[Department]
+        """
+        departments = Department.query.filter_by(**kwargs).all()
+        return departments
+         
+
+    def create(self, **kwargs) -> Department:
+        """Create new department from
+        passed Department object. 
+ 
+        :param \**kwargs:
+            see below
+
+        :Keyword Arguments:
+            * *department* (``Department``) --
+              department object
+
+        :return: created Department 
+        :rtype: Department 
         """
         department=kwargs.get('department')
         db.session.add(department)
@@ -52,15 +71,14 @@ class DepartmentService:
         return department
 
 
-    def delete(self, id: int) -> bool:
+    def delete(self, id: int) -> None:
         """Delete department from db
-        by id
+        by department id
 
         :param id: department to delete from db
         :type id: int
-        :raises LookupError: raise if department with this id doesn't exist
-        :return: True if department deleted succesfull
-        :rtype: bool
+        :return: None
+        :rtype: None
         """
         department = Department.query.get(id)
         db.session.delete(department)
@@ -68,18 +86,18 @@ class DepartmentService:
 
 
     def update(self, **kwargs) -> Department:
-        """[summary]
-
+        """Update desired department
+        by passing new department object. 
+        Update column y column form new to old
         :param \**kwargs:
             see below
 
         :Keyword Arguments:
             * *id* (``int``) --
               department id
-            * *name* (``str``) --
-              department name
+            * *department* (``Department``) --
+              department object
            
-
         :return: updated department 
         :rtype: Department object
         """
@@ -92,11 +110,11 @@ class DepartmentService:
         return department
 
 
-    def delete_orphans(self, id):
-        """[summary]
+    def delete_orphans(self, id: int) -> None:
+        """Delete employees of certain department
 
-        :param id: [description]
-        :type id: [type]
+        :param id: department id
+        :type id: int
         """
         department = self.read_by_param(id=id)[0]
         for employee in department.employee:

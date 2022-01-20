@@ -17,26 +17,37 @@ parser.add_argument('name', required=True, help='Name cannot be blank!')
 
 
 class DepartmentListAPI(Resource):
-    """[summary]
+    """API rest service for '/departments/'
 
-    :param Resource: [description]
-    :type Resource: [type]
-    :return: [description]
-    :rtype: [type]
+    :methods: 
+        * get(),
+        * post(),
     """
     @staticmethod
     def get():
-        """[summary]
+        """Handle GET request for /department/
+        get all departmnets from db and serialized it by marshmellow 
 
-        :return: [description]
-        :rtype: [type]
+        :responses: 
+            * 200: serialized json departments list 
+
         """
         departments = department_service.read_all()
         return department_schema.dump(departments, many=True), 200
 
     @staticmethod
     def post():
-        """[summary]
+        """Handle POST request for department 
+        parse args, then  deserialisation, 
+        after pass created Department object to service for creation.
+        after creation return created object with HTTP status code 200
+        if during deserialisation catch exception, json error mesages with  
+        HTTP status code 200 will return.
+
+       :responses: 
+            * 201: department json
+
+            * 400: json error mesage 
         """
         args = parser.parse_args()
         try:
@@ -44,52 +55,60 @@ class DepartmentListAPI(Resource):
             department = department_service.create(department=department)
         except ValidationError as err:
             return err.messages, 400
-        return department_schema.dump(department), 200
+        return department_schema.dump(department), 201
         
 
 class DepartmentAPI(Resource):
-    """[summary]
+    """API rest service for '/departments/<int:id>'
 
-    :param Resource: [description]
-    :type Resource: [type]
-    :return: [description]
-    :rtype: [type]
+    :methods: 
+        * get(id),
+        * update(id),
+        * delete(id)
     """
     @staticmethod
     def get(id: int):
-        """Handle GET request for department/<id>
+        """Handle GET request for /department/<id>
         via id get department and return
         json with http response code
         
         :param id: department id
         :type id: int
-        :return: department json and HTTP status code 200 if succesfull
-        :rtype: JSON, HTTP status code
-        """
+
+        :responses: 
+            * 200: department json
+
+            * 404: json error mesage 
+        """ 
         try:
             department_schema.is_id_exist(id)
             department = department_service.read_by_param(id=id)[0]
         except ValidationError as err:
-            return err.messages, 400
+            return err.messages, 404
         else:
             return department_schema.dump(department), 200
 
         
     @staticmethod
     def put(id: int):
-        """Handle PUT request for department/<id>
+        """Handle PUT request for /department/<id>
         parse arguments from json and update desired department
 
-        :param id: 
+        :param id: department id
         :type id: int
-        :return: [description]
-        :rtype: [type]
+
+        :responses: 
+            * 200: department json
+
+            * 404: json error mesage if no this id i db 
+
+            * 400: json error mesage if pased data is not valid
         """
         args = parser.parse_args()
         try:
             department_schema.is_id_exist(id)
         except ValidationError as err:
-            return err.messages, 400
+            return err.messages, 404
         try:
             department = department_schema.load(args)
             department = department_service.update(department=department, id=id)   
@@ -100,14 +119,17 @@ class DepartmentAPI(Resource):
 
     @staticmethod        
     def delete(id: int):
-        """Handle DELETE request for department/<id>
+        """Handle DELETE request for /department/<id>
         if department with this id exist it will be deleted
-        and return HTTP status code 204
+        and return HTTP status code 204 else 404
 
-        :param id: desired department to delete
+        :param id: department id
         :type id: int
-        :return: 204 HTTP status code if sucesfull
-        :rtype: HTTP status code
+        
+        :responses: 
+            * 204: succeslfull deleting; no content 
+
+            * 404: json error mesage if no this id i db 
         """        
         orphan = request.args.get('orphan', type=int)
         try:
@@ -116,9 +138,9 @@ class DepartmentAPI(Resource):
                 department_service.delete_orphans(id)
             department_service.delete(id)
         except ValidationError as err:
-            return err.messages, 400
+            return err.messages, 404
         else:
-            return {'message' : f'department with {id} deleted sucessfuly'}, 204
+            return 204
 
 
 api.add_resource(DepartmentListAPI, '/departments/')
