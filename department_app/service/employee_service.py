@@ -93,24 +93,22 @@ class EmployeeService:
         db.session.commit()
 
     def search(self, args):
-        department_id=args.get('department_id')
-        start_date = args.get('start_date')
-        end_date = args.get('end_date')
-        search = args.get('search[value]')
-        start = args.get('start', type=int)
-        length = args.get('length', type=int)
-        draw = args.get('draw', type=int)
-        get_col_index = lambda i: args.get(f'order[{i}][column]')
-        get_col_name = lambda col_index: args.get(f'columns[{col_index}][data]')
-        get_descending = lambda i: args.get(f'order[{i}][dir]')
+        """[summary]
 
+        :param args: [description]
+        :type args: [type]
+        :return: [description]
+        :rtype: [type]
+        """
+        department_id=args.get('department_id')
+        draw = args.get('draw', type=int)
+        
         query = Employee.query
-        if department_id: # If department specified filter all employee in this dep
-            query = query.filter_by(department_id=department_id)
-        query = self.datarange_filter(query, start_date, end_date)
-        query, total_filtered = self.search_filter(query, search)
-        query = self.sort_data(query, get_col_index, get_col_name, get_descending)
-        query = self.paginate_data(query, start, length)
+        query = self.department_filter(query, department_id)
+        query = self.datarange_filter(query, args)
+        query, total_filtered = self.search_filter(query, args)
+        query = self.sort_data(query, args)
+        query = self.paginate_data(query, args)
         recordstotal = Employee.query.count()
 
         result = namedtuple("result", ["query", "total_filtered", "recordstotal", "draw"])
@@ -121,7 +119,32 @@ class EmployeeService:
             draw
         )
 
-    def datarange_filter(self, query, start_date, end_date):
+    def department_filter(self, query, department_id):
+        """[summary]
+
+        :param query: [description]
+        :type query: [type]
+        :param department_id: [description]
+        :type department_id: [type]
+        :return: [description]
+        :rtype: [type]
+        """
+        if department_id: 
+           query = query.filter_by(department_id=department_id)
+        return query
+
+    def datarange_filter(self, query, args):
+        """[summary]
+
+        :param query: [description]
+        :type query: [type]
+        :param args: [description]
+        :type args: [type]
+        :return: [description]
+        :rtype: [type]
+        """
+        start_date = args.get('start_date')
+        end_date = args.get('end_date')
         if start_date:
             start_date = datetime.strptime(start_date, '%Y-%m-%d')
         else:
@@ -133,14 +156,35 @@ class EmployeeService:
         query = query.filter(Employee.birthdate.between(start_date,end_date))
         return query
 
-    def search_filter(self, query, search):
+    def search_filter(self, query, args):
+        """[summary]
+
+        :param query: [description]
+        :type query: [type]
+        :param args: [description]
+        :type args: [type]
+        :return: [description]
+        :rtype: [type]
+        """
+        search = args.get('search[value]')
         if search:
             query = query.filter(Employee.name.like(f'%{search}%'))
         total_filtered = query.count()
         return query, total_filtered
-
        
-    def sort_data(self, query, get_col_index, get_col_name, get_descending):
+    def sort_data(self, query, args):
+        """[summary]
+
+        :param query: [description]
+        :type query: [type]
+        :param args: [description]
+        :type args: [type]
+        :return: [description]
+        :rtype: [type]
+        """
+        get_col_index = lambda i: args.get(f'order[{i}][column]')
+        get_col_name = lambda col_index: args.get(f'columns[{col_index}][data]')
+        get_descending = lambda i: args.get(f'order[{i}][dir]')
         order = []
         i = 0
         while True:
@@ -159,9 +203,19 @@ class EmployeeService:
         if order:
             query = query.order_by(*order)
         return query
-
     
-    def paginate_data(self, query, start, length):
+    def paginate_data(self, query, args):
+        """[summary]
+
+        :param query: [description]
+        :type query: [type]
+        :param args: [description]
+        :type args: [type]
+        :return: [description]
+        :rtype: [type]
+        """
+        start = args.get('start', type=int)
+        length = args.get('length', type=int)
         query = query.offset(start).limit(length)
         return query
 

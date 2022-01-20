@@ -1,5 +1,5 @@
 from .base import db
-#from .employee_model import Employee
+
 
 class Department(db.Model):
     """[summary]
@@ -17,8 +17,13 @@ class Department(db.Model):
     
     @property
     def average_salary(self):
+        """[summary]
+
+        :return: [description]
+        :rtype: [type]
+        """
         try:
-            return round(sum(employee.salary for employee in self.employee)/len(self.employee), 2)
+            return round(sum(employee.salary for employee in self.employee)/(1 or len(self.employee)), 2)
         except ZeroDivisionError:
             return 0
 

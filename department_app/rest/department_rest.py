@@ -1,6 +1,6 @@
 from marshmallow import ValidationError
 from flask_restful import Resource, Api, reqparse
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 
 from department_app.service.department_service import DepartmentService
 from department_app.serializers.department_serializer import DepartmentSchema
@@ -88,6 +88,9 @@ class DepartmentAPI(Resource):
         args = parser.parse_args()
         try:
             department_schema.is_id_exist(id)
+        except ValidationError as err:
+            return err.messages, 400
+        try:
             department = department_schema.load(args)
             department = department_service.update(department=department, id=id)   
         except ValidationError as err:

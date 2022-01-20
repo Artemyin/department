@@ -1,5 +1,5 @@
 from marshmallow import ValidationError
-from flask import Blueprint, render_template
+from flask import Blueprint, jsonify, render_template, abort
 from department_app.service.department_service import DepartmentService
 from department_app.serializers.department_serializer import DepartmentSchema
 
@@ -41,7 +41,14 @@ def department(id: int):
         department = department_service.read_by_param(id=id)[0]
         departments = department_service.read_all()
     except ValidationError as err:
-        return err.messages, 400
+        return abort(err.messages[0]), 404
     else:
         return render_template('department/department.html', departments=departments, department=department)
-    
+
+# @department_bp.errorhandler(500)
+# def internal_server_error(e):
+#     return render_template('500.html'), 500
+
+@department_bp.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404

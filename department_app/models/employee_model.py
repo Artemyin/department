@@ -1,8 +1,7 @@
-#from sqlalchemy.orm import backref
-from datetime import date, datetime
+from datetime import date
 
-from department_app.models.department_model import Department
 from .base import db
+
 
 class Employee(db.Model):
     """[summary]
@@ -41,5 +40,9 @@ class Employee(db.Model):
         
             
     def __repr__(self) -> str:
+        """[summary]
 
+        :return: [description]
+        :rtype: str
+        """
         return f'{self.name}'

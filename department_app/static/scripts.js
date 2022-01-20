@@ -87,28 +87,40 @@ document.addEventListener('DOMContentLoaded', function() {
         httpPostAsync('/employees/', jsondata)
     });
 });
-function make_raw(id, name, salary, count){
-var row_dep_table = `<tr>` +
+function make_emp(id, name, salary, count, department){
+var row_table = `` +
             `<td>${id}</td>`+
-            `<td><a href="/departments/${id}" id="department_name${id}">${name}</a></td>`+
+            `<td>${name}</td>`+
             `<td>${salary}</td>`+
-            `<td>${count}</td>`+
-            `<td></td>`
-        `<tr>`};
+            `<td><a href="/employees/${department.id}">${department.name}}</a></td>`
+            return row_table
+        };
+
 
 function httpDeleteAsync(url, id, e) {
     const xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 204){
-            // remove row from table with deleted data
-            const response = xmlHttp.response;
-            console.log("new", response)
-            alert(response)
-            if (window.location.href != url){
-                window.location.replace(url);
+    // xmlHttp.onreadystatechange = function() { 
+    //     if (xmlHttp.readyState == 4 && xmlHttp.status == 204){
+    //         // remove row from table with deleted data
+    //         const response = xmlHttp.response;
+    //         console.log("new", response)
+    //         alert(response)
+    //         if (window.location.href != url){
+    //             window.location.replace(url);
+    //         } else {
+    //             e.remove();
+    //         }
+    //     };
+    xmlHttp.onload = function() {
+            if (xmlHttp.status != 204 ) {
+                alert(`error: ${xmlHttp.response}`)
+            } else {
+                if (window.location.href != url){
+                    window.location.replace(url);
             } else {
                 e.remove();
             }
+            
         };
     }
     xmlHttp.open("DELETE", '/api/v1'+url+id, true); // true for asynchronous 
@@ -120,9 +132,15 @@ function httpPutAsync(url, id, data, callback) {
     const xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-            const response = JSON.parse(xmlHttp.response);
-            const department_name = document.getElementById('department_name'+response.id);
-            department_name.textContent = response.name;
+            if (url == '/departments/'){
+                const response = JSON.parse(xmlHttp.response);
+                const department_name = document.getElementById('department_name'+response.id);
+                department_name.textContent = response.name;
+            } if (url == '/employees/'){
+                const response = JSON.parse(xmlHttp.response);
+                const employee_row = document.getElementById('employee_row'+response.id);
+                employee_row.innerHTML = make_emp(response.id, response.name, response.salary, response.count, response.department);
+            }
         } if (xmlHttp.readyState == 4 && xmlHttp.status == 400) {
             alert(`error: ${xmlHttp.response}`)
         };

@@ -9,12 +9,21 @@ employee_service = EmployeeService()
 class DepartmentService:
 
     def read_all(self):
+        """[summary]
 
+        :return: [description]
+        :rtype: [type]
+        """
         departments = Department.query.all()
         return departments
 
 
     def read_by_param(self, **kwargs):
+        """[summary]
+
+        :return: [description]
+        :rtype: [type]
+        """
         departments = Department.query.filter_by(**kwargs).all()
         return departments
          
@@ -84,6 +93,11 @@ class DepartmentService:
 
 
     def delete_orphans(self, id):
+        """[summary]
+
+        :param id: [description]
+        :type id: [type]
+        """
         department = self.read_by_param(id=id)[0]
         for employee in department.employee:
             employee_service.delete(id=employee.id)
