@@ -7,7 +7,7 @@ employee_service = EmployeeService()
 
 
 class DepartmentService:
-    """CRUD service for department model
+    """CRUD service for department model.
 
     implement service database layer, via
     create, read, update, delete methods. 
@@ -22,7 +22,7 @@ class DepartmentService:
 
 
     def read_by_param(self, **kwargs) -> list[Department]:
-        """Return filtred list by parameters list of Departments
+        """Return filtred list by parameters list of Departments.
         """
         departments = Department.query.filter_by(**kwargs).all()
         return departments
@@ -38,7 +38,7 @@ class DepartmentService:
 
 
     def delete(self, id: int) -> None:
-        """Delete department from db by department id
+        """Delete department from db by department id.
         """
         department = Department.query.get(id)
         db.session.delete(department)
@@ -47,7 +47,7 @@ class DepartmentService:
 
     def update(self, **kwargs) -> Department:
         """Update desired department by passing new department object. 
-        Update column y column form new to old
+        Update column by column form new to old.
         """
         department = Department.query.get_or_404(kwargs.pop('id'))
         args = kwargs.get('department')
@@ -59,7 +59,7 @@ class DepartmentService:
 
 
     def delete_orphans(self, id: int) -> None:
-        """Delete employees of certain department
+        """Delete employees of certain department.
         """
         department = self.read_by_param(id=id)[0]
         for employee in department.employee:

@@ -7,61 +7,29 @@ from department_app.models.employee_model import Employee
 
 
 class EmployeeService:
-    """CRUD service for employee model
+    """CRUD service for employee model.
 
     implement service database layer, via
     create, read, update, delete, search methods. 
-
-    :methods: 
-        * get_all(),
-        * get_by_param(**kwargs),
-        * create(**kwargs),
-        * update(**kwargs),
-        * delete(id),
-        * search(args),
     """
 
     def read_all(self) -> list[Employee]:
         """read_all read all Employees from db
-        and return in list
-
-        :return: list of all Employees in db
-        :rtype: list of instances Employee class
+        and return in list.
         """
         employees = Employee.query.all()
         return employees
 
     def read_by_param(self, **kwargs)  -> list[Employee]:
-        """[summary]
-
-        :param \**kwargs:
-            see below
-
-        :Keyword Arguments:
-            * *id* (``int``) --
-              employee id
-            * *name* (``str``) --
-              employee name
-            * *birthdate* (``datetime``) --
-              employee name
-            * *salary* (``int``) --
-              employee name              
-            * *department* (``Departemnt``) --
-              employee name            
-
-        :return: [description]
-        :rtype: list[Employee]
+        """Return filtred list by parameters list of Employees.
         """
         employees = Employee.query.filter_by(**kwargs).all()
         return employees 
         
     def update(self, **kwargs):
-        """[summary]
-
-        :raises LookupError: [description]
-        :return: [description]
-        :rtype: [type]
-        """        
+        """Update desired employee by passing new employee object. 
+        Update column by column form new to old.
+        """       
         employee = Employee.query.get_or_404(kwargs.pop('id'))
         args = kwargs.get('employee')
         columns = [m.key for m in args.__table__.columns if m.key != 'id']
@@ -71,10 +39,7 @@ class EmployeeService:
         return employee
 
     def create(self, **kwargs):
-        """[summary]
-
-        :return: [description]
-        :rtype: [type]
+        """Create new employee from passed Employee object. 
         """
         employee = kwargs.get('employee')
         db.session.add(employee)
@@ -82,30 +47,26 @@ class EmployeeService:
         return employee
 
     def delete(self, id):
-        """[summary]
-
-        :param id: [description]
-        :type id: [type]
-        :return: [description]
-        :rtype: [type]
+        """Delete employee from db by employee id
         """
         employee = Employee.query.get(id)
         db.session.delete(employee)
         db.session.commit()
 
     def search(self, args):
-        """[summary]
+        """Filter query by passed arguments,
+        filter all employees for certain departments,
+        filter by datarange, search employees name,
+        sorting data, paginate data.
 
-        :param args: [description]
-        :type args: [type]
-        :return: [description]
-        :rtype: [type]
+        :return: namedtuple for stright access to returned data
+        :rtype: namedtuple
         """
-        department_id=args.get('department_id')
+        
         draw = args.get('draw', type=int)
         
         query = Employee.query
-        query = self.department_filter(query, department_id)
+        query = self.department_filter(query, args)
         query = self.datarange_filter(query, args)
         query, total_filtered = self.search_filter(query, args)
         query = self.sort_data(query, args)
@@ -120,29 +81,18 @@ class EmployeeService:
             draw
         )
 
-    def department_filter(self, query, department_id):
-        """[summary]
-
-        :param query: [description]
-        :type query: [type]
-        :param department_id: [description]
-        :type department_id: [type]
-        :return: [description]
-        :rtype: [type]
+    def department_filter(self, query, args):
+        """Filtering Employyes of certain department.
         """
+        department_id = args.get('department_id')
         if department_id: 
            query = query.filter_by(department_id=department_id)
         return query
 
     def datarange_filter(self, query, args):
-        """[summary]
-
-        :param query: [description]
-        :type query: [type]
-        :param args: [description]
-        :type args: [type]
-        :return: [description]
-        :rtype: [type]
+        """Filtering Employees from start_date to end_date.
+        if start_date not specify, start_date will assign to default- 1900, 1, 1
+        if end_date not specify, end_date will assign to default - current time
         """
         start_date = args.get('start_date')
         end_date = args.get('end_date')
@@ -158,14 +108,10 @@ class EmployeeService:
         return query
 
     def search_filter(self, query, args):
-        """[summary]
+        """Filtering Employees by name 
 
-        :param query: [description]
-        :type query: [type]
-        :param args: [description]
-        :type args: [type]
-        :return: [description]
-        :rtype: [type]
+        :return: employee query, total_filtered employee
+        :rtype: query, int
         """
         search = args.get('search[value]')
         if search:
@@ -174,14 +120,7 @@ class EmployeeService:
         return query, total_filtered
        
     def sort_data(self, query, args):
-        """[summary]
-
-        :param query: [description]
-        :type query: [type]
-        :param args: [description]
-        :type args: [type]
-        :return: [description]
-        :rtype: [type]
+        """Sorting columns order and asc is passed by arguments
         """
         get_col_index = lambda i: args.get(f'order[{i}][column]')
         get_col_name = lambda col_index: args.get(f'columns[{col_index}][data]')
@@ -206,14 +145,7 @@ class EmployeeService:
         return query
     
     def paginate_data(self, query, args):
-        """[summary]
-
-        :param query: [description]
-        :type query: [type]
-        :param args: [description]
-        :type args: [type]
-        :return: [description]
-        :rtype: [type]
+        """Paginate query
         """
         start = args.get('start', type=int)
         length = args.get('length', type=int)

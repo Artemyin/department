@@ -1,6 +1,6 @@
 from marshmallow import ValidationError
 from flask_restful import Resource, Api, reqparse
-from flask import Blueprint, request, jsonify, json
+from flask import Blueprint, request, json
 
 from department_app.service.department_service import DepartmentService
 from department_app.serializers.department_serializer import DepartmentSchema
@@ -42,7 +42,8 @@ class DepartmentListAPI(Resource):
             department = department_service.create(department=department)
         except ValidationError as err:
             return {"message": json.dumps(err.messages)}, 400
-        return department_schema.dump(department), 201
+        else:
+            return department_schema.dump(department), 201
         
 
 class DepartmentAPI(Resource):
@@ -91,6 +92,8 @@ class DepartmentAPI(Resource):
     def delete(id: int):
         """Handle DELETE request for /department/<id>
         if department with this id exist it will be deleted
+        if with request was passed argument ?orphan=1
+        all employees of this department will be deleted by delete_orphans(id)
         and return HTTP status code 204 else 404
 
         :param id: department id

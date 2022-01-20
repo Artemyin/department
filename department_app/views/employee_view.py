@@ -22,10 +22,8 @@ employee_bp = Blueprint(
 
 @employee_bp.route('/employees/', methods=['GET'])
 def employees():
-    """[summary]
-
-    :return: [description]
-    :rtype: [type]
+    """This view function handle GET request for 
+    render page with list of all employees
     """
     employees = employee_service.read_all()
     departments = department_service.read_all()
@@ -34,19 +32,15 @@ def employees():
 
 @employee_bp.route('/employees/<id>', methods=['GET'])
 def employee(id: int):
-    """[summary]
-
-    :param id: [description]
-    :type id: int
-    :return: [description]
-    :rtype: [type]
+    """This view function handle GET request for certain id
+    render employee page with current id if avalible
     """
     try:
         employee_schema.is_id_exist(id)
         employee = employee_service.read_by_param(id=id)[0]
         departments = department_service.read_all()
     except ValidationError as err:
-        return err.messages, 404
+        return render_template('404.html')
     else:
         return render_template('employee/employee.html', employee=employee, departments=departments)
     

@@ -21,24 +21,16 @@ parser.add_argument('department', required=True, type=int, default=None)
 
 class EmployeeListAPI(Resource):
     """API rest service for '/employees/'
-
-    :methods: 
-        * get(),
-        * post(),
     """
     @staticmethod
     def get():
-        """Handle GET request for /department/
+        """Handle GET request for /employee/
         get args from get? parameters
         and pass it to search method wihich return named tuple with
         list of employees filtered after search, data range, sorted, and paginated;
         count of filtered data, and total quantities of employees, 
         and draw wich is specific javascript table parametr
         returned JSON schema required for javascript table. 
-        
-        :responses: 
-            * 200: serialized json filtred list of employyes and data for paginationd
-
         """
 
         args = request.args
@@ -52,10 +44,12 @@ class EmployeeListAPI(Resource):
     
     @staticmethod
     def post():
-        """[summary]
-
-        :return: [description]
-        :rtype: [type]
+        """Handle POST request for employee
+        parse args, then  deserialisation, 
+        after pass created Employee object to service for creation.
+        after creation return created object with HTTP status code 200
+        if during deserialisation catch exception, json error mesages with  
+        HTTP status code 200 will return.
         """
         args = parser.parse_args()
         try:
@@ -70,20 +64,15 @@ class EmployeeListAPI(Resource):
 
 class EmployeeAPI(Resource):
     """API rest service for '/employees/<int:id>'
-
-    :methods: 
-        * get(id),
-        * update(id),
-        * delete(id)
     """
     @staticmethod
     def get(id: int):
-        """[summary]
+        """Handle GET request for /employee/<id>
+        via id get employee and return
+        json with http response code
 
-        :param id: [description]
+        :param id: employee id
         :type id: int
-        :return: [description]
-        :rtype: [type]
         """
         try:
             employee_schema.is_id_exist(id)
@@ -96,12 +85,11 @@ class EmployeeAPI(Resource):
 
     @staticmethod
     def put(id: int):
-        """[summary]
+        """Handle PUT request for /employee/<id>
+        parse arguments from json and update desired employee
 
-        :param id: [description]
+        :param id: employee id
         :type id: int
-        :return: [description]
-        :rtype: [type]
         """
         args = parser.parse_args()
         try:
@@ -118,14 +106,12 @@ class EmployeeAPI(Resource):
 
     @staticmethod
     def delete(id: int):
-        """Handle DELETE request for department/<id>
-        if department with this id exist it will be deleted
+        """Handle DELETE request for /employee/<id>
+        if employee with this id exist it will be deleted
         and return HTTP status code 204
 
-        :param id: desired department to delete
+        :param id: desired employee to delete
         :type id: int
-        :return: 204 HTTP status code if sucesfull
-        :rtype: HTTP status code
         """
         try:
             employee_schema.is_id_exist(id)

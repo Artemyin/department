@@ -5,10 +5,8 @@ from .error_handler import error_bp, internal_error
 
 
 def init_app(app):
-    """[summary]
-
-    :param app: [description]
-    :type app: [type]
+    """Registring blueprints for view controler services
+    called from factory app id department_app.__init__.py
     """
     app.register_blueprint(department_bp)
     app.register_blueprint(employee_bp)

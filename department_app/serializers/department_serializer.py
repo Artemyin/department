@@ -18,7 +18,7 @@ class DepartmentSchema(ma.Schema):
     average_salary = fields.Float(dump_only=True)
 
     @validates("name")
-    def is_name_exist(self, name):
+    def is_name_exist(self, name: str):
         """Custom field validator for name
         check is id already exist in db
 
@@ -31,7 +31,7 @@ class DepartmentSchema(ma.Schema):
             raise ValidationError('This name already exist in DB')
 
     @validates("id")
-    def is_id_exist(self, id):
+    def is_id_exist(self, id: int):
         """Custom field validator for name
         check is name already exist in db
 
@@ -43,7 +43,7 @@ class DepartmentSchema(ma.Schema):
             raise ValidationError('There is not id in DB')
 
     @post_load
-    def make_department(self, data, **kwargs) -> Department:
+    def make_department(self, data: dict, **kwargs) -> Department:
         """Deserialiaze method for transforming js to ORM object
 
         :param data: dict with validated parameters

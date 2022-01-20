@@ -5,11 +5,6 @@ from .base import db
 
 class Employee(db.Model):
     """Employee orm model
-
-    :param db: [description]
-    :type db: [type]
-    :return: [description]
-    :rtype: [type]
     """
     __tablename__ = 'employee'
 
@@ -40,10 +35,6 @@ class Employee(db.Model):
         
             
     def __repr__(self) -> str:
-        """beautiful representation info 
-        about department.
-
-        :return: Employee's name
-        :rtype: str
+        """Representation info about department.
         """
         return f'{self.name}'

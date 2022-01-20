@@ -1,5 +1,6 @@
 from marshmallow import ValidationError
 from flask import Blueprint, jsonify, render_template, abort
+
 from department_app.service.department_service import DepartmentService
 from department_app.serializers.department_serializer import DepartmentSchema
 
@@ -17,9 +18,6 @@ department_bp = Blueprint(
 def departments():
     """This view function handle GET request for 
     render page with list of all departments
-
-    :return: render HTML template with list of all departments
-    :rtype: HTML
     """
     departments = department_service.read_all()
     return render_template('department/departments.html', departments=departments)
@@ -29,14 +27,6 @@ def departments():
 def department(id: int):
     """This view function handle GET request for certain id
     render departemnt page with current id if avalible
-    
-    :param id: id of department to render
-    :type id: int
-    :return: if is_id_exist raise ValidationError, 404.html will return 
-    :rtype: render_template()
-    :return: render HTML page with desired department
-            and departments for select html element
-    :rtype: render_template()
     """
     try:
         department_schema.is_id_exist(id)

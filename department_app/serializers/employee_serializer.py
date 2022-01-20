@@ -8,25 +8,21 @@ from department_app.models.employee_model import Employee
 
 class DepartmentField(fields.Nested):
     """Inherit neseted field for change deserealiaztion(load)
-    behavior. because _schema error. 
-
-    :param fields: [description]
-    :type fields: [type]
+    behavior.
+    Intend is ommiting missconsisting of Nesting schemas 
+    type Department vs type Integer what was cause [_shema] error.
     """
     def _deserialize(self, value, attr, data, partial=None, **kwargs):
+        """Deserialization of passed parametr department
+        
+        :param value: department id
+        :type value: int
+        """
         return value
     
       
 class EmployeeSchema(ma.Schema):
-    """[summary]
-
-    :param ma: [description]
-    :type ma: [type]
-    :raises ValidationError: [description]
-    :raises ValidationError: [description]
-    :raises ValidationError: [description]
-    :return: [description]
-    :rtype: [type]
+    """Employee Schema for serialization, deserialization, validation
     """
     class Meta:
         model = Employee                      
@@ -41,11 +37,12 @@ class EmployeeSchema(ma.Schema):
 
     @validates("name")
     def is_name_exist(self, name: str):
-        """[summary]
+        """Custom field validator for name
+        check is id already exist in db
 
-        :param name: [description]
-        :type name: [type]
-        :raises ValidationError: [description]
+        :param name: employee name
+        :type name: str
+        :raises ValidationError: This name already exist in DB
         """
         query = Employee.query.filter(Employee.name.like(f'%{name}%')).all()
         if name.lower() in [employee.name.lower() for employee in query]:
@@ -53,22 +50,25 @@ class EmployeeSchema(ma.Schema):
 
     @validates("id")
     def is_id_exist(self, id: int):
-        """[summary]
+        """Custom field validator for name
+        check is name already exist in db
 
-        :param id: [description]
-        :type id: [type]
-        :raises ValidationError: [description]
+        :param id: employee id
+        :type id: int
+        :raises ValidationError: There is no id in DB
         """
         if not Employee.query.filter_by(id=id).all():
             raise ValidationError("There is no id in DB")
 
     @validates("department")
     def is_department_exist(self, department: int):
-        """[summary]
+        """Custom field validator for department
+        check is name already exist in db if pased argument is None
+        functon return None
 
-        :param id: [description]
-        :type id: [type]
-        :raises ValidationError: [description]
+        :param id: department id
+        :type id: int
+        :raises ValidationError: There is no department id in DB
         """
         if id is None:
             return
@@ -77,12 +77,12 @@ class EmployeeSchema(ma.Schema):
 
     @post_load
     def make_employee(self, data, **kwargs):
-        """[summary]
+        """Deserialiaze method for transforming js to ORM object
 
-        :param data: [description]
-        :type data: [type]
-        :return: [description]
-        :rtype: [type]
+        :param data: dict with validated parameters
+        :type data: dict
+        :return: Employee object
+        :rtype: Employee
         """
         return Employee(**data)
                

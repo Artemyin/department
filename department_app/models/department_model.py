@@ -18,11 +18,6 @@ class Department(db.Model):
             return round(sum(employee.salary for employee in self.employee)/(1 or len(self.employee)), 2)
         except ZeroDivisionError:
             return 0
-
-    def __repr__(self) -> str:
-        """Representation info about department.
-        """
-        return f'{self.name}'
     
     def __init__(self, name: str):
         """Department model constructor.
@@ -31,4 +26,8 @@ class Department(db.Model):
         :type name: str
         """
         self.name = name
-    
+        
+    def __repr__(self) -> str:
+        """Representation info about department.
+        """
+        return f'{self.name}'
