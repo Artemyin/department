@@ -1,6 +1,6 @@
 from marshmallow import ValidationError
 from flask_restful import Resource, Api, reqparse
-from flask import Blueprint, request
+from flask import Blueprint, request, json
 
 from department_app.service.employee_service import EmployeeService
 from department_app.serializers.employee_serializer import EmployeeSchema
@@ -20,19 +20,25 @@ parser.add_argument('department', required=True, type=int, default=None)
 
 
 class EmployeeListAPI(Resource):
-    """[summary]
+    """API rest service for '/employees/'
 
-    :param Resource: [description]
-    :type Resource: [type]
-    :return: [description]
-    :rtype: [type]
+    :methods: 
+        * get(),
+        * post(),
     """
     @staticmethod
     def get():
-        """[summary]
+        """Handle GET request for /department/
+        get args from get? parameters
+        and pass it to search method wihich return named tuple with
+        list of employees filtered after search, data range, sorted, and paginated;
+        count of filtered data, and total quantities of employees, 
+        and draw wich is specific javascript table parametr
+        returned JSON schema required for javascript table. 
+        
+        :responses: 
+            * 200: serialized json filtred list of employyes and data for paginationd
 
-        :return: [description]
-        :rtype: [type]
         """
 
         args = request.args
@@ -42,7 +48,7 @@ class EmployeeListAPI(Resource):
             'recordsFiltered': employees.total_filtered,
             'recordsTotal': employees.recordstotal,
             'draw': employees.draw, 
-        }
+        }, 200
     
     @staticmethod
     def post():
@@ -57,18 +63,18 @@ class EmployeeListAPI(Resource):
             employee = employee_schema.load(args)
             employee = employee_service.create(employee=employee)
         except ValidationError as err:
-            return err.messages
+            return {"message": json.dumps(err.messages)}, 400
         else:
-            return employee_schema.dump(employee), 200
+            return employee_schema.dump(employee), 201
 
 
 class EmployeeAPI(Resource):
-    """[summary]
+    """API rest service for '/employees/<int:id>'
 
-    :param Resource: [description]
-    :type Resource: [type]
-    :return: [description]
-    :rtype: [type]
+    :methods: 
+        * get(id),
+        * update(id),
+        * delete(id)
     """
     @staticmethod
     def get(id: int):
@@ -83,7 +89,7 @@ class EmployeeAPI(Resource):
             employee_schema.is_id_exist(id)
             employee = employee_service.read_by_param(id=id)[0]
         except ValidationError as err:
-            return err.messages, 404
+            return {"message": json.dumps(err.messages)}, 404
         else:
             return employee_schema.dump(employee), 200
         
@@ -100,10 +106,13 @@ class EmployeeAPI(Resource):
         args = parser.parse_args()
         try:
             employee_schema.is_id_exist(id)
+        except ValidationError as err:
+            return {"message": json.dumps(err.messages)}, 400
+        try:
             employee = employee_schema.load(args)
             employee = employee_service.update(employee=employee, id=id)   
         except ValidationError as err:
-            return err.messages, 400
+            return {"message": json.dumps(err.messages)}, 400
         else:
             return employee_schema.dump(employee), 200
 
@@ -122,10 +131,10 @@ class EmployeeAPI(Resource):
             employee_schema.is_id_exist(id)
             employee_service.delete(id)
         except ValidationError as err:
-            return err.messages, 404
+            return {"message": json.dumps(err.messages)}, 404
         else:
-            return {'message' : f'employee with {id} deleted sucessfuly'}, 204
+            return 204
 
 
 api.add_resource(EmployeeListAPI, '/employees/')
-api.add_resource(EmployeeAPI, '/employees/<int:id>')
+api.add_resource(EmployeeAPI, '/employees/<id>')

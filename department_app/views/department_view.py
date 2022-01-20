@@ -25,13 +25,15 @@ def departments():
     return render_template('department/departments.html', departments=departments)
 
 
-@department_bp.route('/departments/<int:id>', methods=['GET'])
+@department_bp.route('/departments/<id>', methods=['GET'])
 def department(id: int):
     """This view function handle GET request for certain id
     render departemnt page with current id if avalible
-
+    
     :param id: id of department to render
     :type id: int
+    :return: if is_id_exist raise ValidationError, 404.html will return 
+    :rtype: render_template()
     :return: render HTML page with desired department
             and departments for select html element
     :rtype: render_template()
@@ -41,14 +43,7 @@ def department(id: int):
         department = department_service.read_by_param(id=id)[0]
         departments = department_service.read_all()
     except ValidationError as err:
-        return abort(err.messages[0]), 404
+        return render_template('404.html')
     else:
         return render_template('department/department.html', departments=departments, department=department)
 
-# @department_bp.errorhandler(500)
-# def internal_server_error(e):
-#     return render_template('500.html'), 500
-
-@department_bp.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html'), 404

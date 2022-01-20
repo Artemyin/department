@@ -4,7 +4,7 @@ from .base import db
 
 
 class Employee(db.Model):
-    """[summary]
+    """Employee orm model
 
     :param db: [description]
     :type db: [type]
@@ -40,9 +40,10 @@ class Employee(db.Model):
         
             
     def __repr__(self) -> str:
-        """[summary]
+        """beautiful representation info 
+        about department.
 
-        :return: [description]
+        :return: Employee's name
         :rtype: str
         """
         return f'{self.name}'

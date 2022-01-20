@@ -40,17 +40,13 @@ class EmployeeSchema(ma.Schema):
         allow_none=True, default=None, )
 
     @validates("name")
-    def is_name_exist(self, name: str, id: int):
+    def is_name_exist(self, name: str):
         """[summary]
 
         :param name: [description]
         :type name: [type]
         :raises ValidationError: [description]
         """
-        # current_employee = Employee.query.filter_by(id=id).first()
-        # if name.lower() == current_employee.name.lower():
-        #     return
-
         query = Employee.query.filter(Employee.name.like(f'%{name}%')).all()
         if name.lower() in [employee.name.lower() for employee in query]:
             raise ValidationError("This name already exist in DB")
@@ -67,7 +63,7 @@ class EmployeeSchema(ma.Schema):
             raise ValidationError("There is no id in DB")
 
     @validates("department")
-    def is_department_exist(self, id: int):
+    def is_department_exist(self, department: int):
         """[summary]
 
         :param id: [description]
@@ -76,7 +72,7 @@ class EmployeeSchema(ma.Schema):
         """
         if id is None:
             return
-        if not Department.query.filter_by(id=id).all():
+        if not Department.query.filter_by(id=department).all():
             raise ValidationError("There is no department id in DB")
 
     @post_load

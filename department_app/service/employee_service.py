@@ -10,14 +10,15 @@ class EmployeeService:
     """CRUD service for employee model
 
     implement service database layer, via
-    create, read, update, delete methods. 
+    create, read, update, delete, search methods. 
 
     :methods: 
         * get_all(),
         * get_by_param(**kwargs),
         * create(**kwargs),
         * update(**kwargs),
-        * delete(id)
+        * delete(id),
+        * search(args),
     """
 
     def read_all(self) -> list[Employee]:

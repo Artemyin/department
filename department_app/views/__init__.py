@@ -1,7 +1,7 @@
 from .department_view import department_bp
 from .employee_view import employee_bp
 from .index_view import index_bp
-from .error_handler import page_not_found, internal_error
+from .error_handler import error_bp, internal_error
 
 
 def init_app(app):
@@ -13,6 +13,8 @@ def init_app(app):
     app.register_blueprint(department_bp)
     app.register_blueprint(employee_bp)
     app.register_blueprint(index_bp)
-    app.register_error_handler(404, page_not_found)
+    app.register_blueprint(error_bp)
     app.register_error_handler(500, internal_error)
+
+
     

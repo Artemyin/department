@@ -1,5 +1,4 @@
-from requests import request
-from flask import render_template, Blueprint, jsonify
+from flask import render_template, Blueprint
 
 
 error_bp = Blueprint(
@@ -8,17 +7,8 @@ error_bp = Blueprint(
     static_folder='static'
 )
 
-@error_bp.errorhandler(404)
-def page_not_found(error):
-    return render_template('404.html'), 404
 
-@error_bp.errorhandler(404)
-def _handle_api_error(ex):
-    if request.path.startwith('api/v1/'):
-        return jsonify(ex)    
-    else:
-        return ex
-
+@error_bp.errorhandler(500)
 def internal_error(error):
     return render_template('500.html'), 500
 

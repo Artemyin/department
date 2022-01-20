@@ -1,6 +1,6 @@
 from marshmallow import ValidationError
 from flask_restful import Resource, Api, reqparse
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify, json
 
 from department_app.service.department_service import DepartmentService
 from department_app.serializers.department_serializer import DepartmentSchema
@@ -18,19 +18,11 @@ parser.add_argument('name', required=True, help='Name cannot be blank!')
 
 class DepartmentListAPI(Resource):
     """API rest service for '/departments/'
-
-    :methods: 
-        * get(),
-        * post(),
     """
     @staticmethod
     def get():
         """Handle GET request for /department/
         get all departmnets from db and serialized it by marshmellow 
-
-        :responses: 
-            * 200: serialized json departments list 
-
         """
         departments = department_service.read_all()
         return department_schema.dump(departments, many=True), 200
@@ -43,28 +35,18 @@ class DepartmentListAPI(Resource):
         after creation return created object with HTTP status code 200
         if during deserialisation catch exception, json error mesages with  
         HTTP status code 200 will return.
-
-       :responses: 
-            * 201: department json
-
-            * 400: json error mesage 
         """
         args = parser.parse_args()
         try:
             department = department_schema.load(args)
             department = department_service.create(department=department)
         except ValidationError as err:
-            return err.messages, 400
+            return {"message": json.dumps(err.messages)}, 400
         return department_schema.dump(department), 201
         
 
 class DepartmentAPI(Resource):
     """API rest service for '/departments/<int:id>'
-
-    :methods: 
-        * get(id),
-        * update(id),
-        * delete(id)
     """
     @staticmethod
     def get(id: int):
@@ -74,17 +56,12 @@ class DepartmentAPI(Resource):
         
         :param id: department id
         :type id: int
-
-        :responses: 
-            * 200: department json
-
-            * 404: json error mesage 
         """ 
         try:
             department_schema.is_id_exist(id)
             department = department_service.read_by_param(id=id)[0]
         except ValidationError as err:
-            return err.messages, 404
+            return {"message": json.dumps(err.messages)}, 404
         else:
             return department_schema.dump(department), 200
 
@@ -96,24 +73,17 @@ class DepartmentAPI(Resource):
 
         :param id: department id
         :type id: int
-
-        :responses: 
-            * 200: department json
-
-            * 404: json error mesage if no this id i db 
-
-            * 400: json error mesage if pased data is not valid
         """
         args = parser.parse_args()
         try:
             department_schema.is_id_exist(id)
         except ValidationError as err:
-            return err.messages, 404
+            return {"message": json.dumps(err.messages)}, 404
         try:
             department = department_schema.load(args)
             department = department_service.update(department=department, id=id)   
         except ValidationError as err:
-            return err.messages, 400
+            return {"message": json.dumps(err.messages)}, 400
         else:
             return department_schema.dump(department), 200
 
@@ -125,11 +95,6 @@ class DepartmentAPI(Resource):
 
         :param id: department id
         :type id: int
-        
-        :responses: 
-            * 204: succeslfull deleting; no content 
-
-            * 404: json error mesage if no this id i db 
         """        
         orphan = request.args.get('orphan', type=int)
         try:
@@ -138,10 +103,10 @@ class DepartmentAPI(Resource):
                 department_service.delete_orphans(id)
             department_service.delete(id)
         except ValidationError as err:
-            return err.messages, 404
+            return {"message": json.dumps(err.messages)}, 404
         else:
             return 204
 
 
 api.add_resource(DepartmentListAPI, '/departments/')
-api.add_resource(DepartmentAPI, '/departments/<int:id>')
+api.add_resource(DepartmentAPI, '/departments/<id>')

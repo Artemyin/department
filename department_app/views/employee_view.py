@@ -32,7 +32,7 @@ def employees():
     return render_template('employee/employees.html', employees=employees, departments=departments)
 
 
-@employee_bp.route('/employees/<int:id>', methods=['GET'])
+@employee_bp.route('/employees/<id>', methods=['GET'])
 def employee(id: int):
     """[summary]
 

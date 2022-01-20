@@ -2,9 +2,9 @@ from .serializer import ma
 
 
 def init_app(app):
-    """[summary]
-
-    :param app: [description]
-    :type app: [type]
+    """Registring marshmellow schemas
+    for serializtion, deserializtion, validation
+    :param app: flask application
+    :type app: Flask
     """
     ma.init_app(app)

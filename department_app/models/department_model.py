@@ -3,11 +3,6 @@ from .base import db
 
 class Department(db.Model):
     """Department orm model
-
-    :columns: 
-        * id: primary key,
-        * name: string,
-        * employees: list[Employee] relationship with Employee table,
     """
     __tablename__ = 'department'
 
@@ -18,9 +13,6 @@ class Department(db.Model):
     @property
     def average_salary(self) -> float:
         """Departmen's employees average salary property
-
-        :return: department's demployees average salary 
-        :rtype: float
         """
         try:
             return round(sum(employee.salary for employee in self.employee)/(1 or len(self.employee)), 2)
@@ -28,11 +20,7 @@ class Department(db.Model):
             return 0
 
     def __repr__(self) -> str:
-        """beautiful representation info 
-        about department.
-
-        :return: name of department
-        :rtype: str
+        """Representation info about department.
         """
         return f'{self.name}'
     

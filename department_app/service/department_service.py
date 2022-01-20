@@ -11,59 +11,25 @@ class DepartmentService:
 
     implement service database layer, via
     create, read, update, delete methods. 
-
-    :methods: 
-        * get_all(),
-        * get_by_param(**kwargs),
-        * create(**kwargs),
-        * update(**kwargs),
-        * delete(id),
     """
 
     def read_all(self) -> list[Department]:
         """Get all Departments from DB
         and return in list.
-
-        :return: all departments
-        :rtype: list[Department]
         """
         departments = Department.query.all()
         return departments
 
 
     def read_by_param(self, **kwargs) -> list[Department]:
-        """Return filtred list of Departments
-
-        :param \**kwargs:
-            see below
-
-        :Keyword Arguments:
-            * *id* (``int``) --
-              department id
-            * *name* (``str``) --
-              department name
-
-
-        :return: filtred departments
-        :rtype: list[Department]
+        """Return filtred list by parameters list of Departments
         """
         departments = Department.query.filter_by(**kwargs).all()
         return departments
          
 
     def create(self, **kwargs) -> Department:
-        """Create new department from
-        passed Department object. 
- 
-        :param \**kwargs:
-            see below
-
-        :Keyword Arguments:
-            * *department* (``Department``) --
-              department object
-
-        :return: created Department 
-        :rtype: Department 
+        """Create new department from passed Department object. 
         """
         department=kwargs.get('department')
         db.session.add(department)
@@ -72,13 +38,7 @@ class DepartmentService:
 
 
     def delete(self, id: int) -> None:
-        """Delete department from db
-        by department id
-
-        :param id: department to delete from db
-        :type id: int
-        :return: None
-        :rtype: None
+        """Delete department from db by department id
         """
         department = Department.query.get(id)
         db.session.delete(department)
@@ -86,20 +46,8 @@ class DepartmentService:
 
 
     def update(self, **kwargs) -> Department:
-        """Update desired department
-        by passing new department object. 
+        """Update desired department by passing new department object. 
         Update column y column form new to old
-        :param \**kwargs:
-            see below
-
-        :Keyword Arguments:
-            * *id* (``int``) --
-              department id
-            * *department* (``Department``) --
-              department object
-           
-        :return: updated department 
-        :rtype: Department object
         """
         department = Department.query.get_or_404(kwargs.pop('id'))
         args = kwargs.get('department')
@@ -112,9 +60,6 @@ class DepartmentService:
 
     def delete_orphans(self, id: int) -> None:
         """Delete employees of certain department
-
-        :param id: department id
-        :type id: int
         """
         department = self.read_by_param(id=id)[0]
         for employee in department.employee:
