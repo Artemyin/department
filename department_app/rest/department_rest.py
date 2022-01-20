@@ -87,7 +87,7 @@ class DepartmentAPI(Resource):
         except ValidationError as err:
             return {"message": json.dumps(err.messages)}, 400
         else:
-            return department_schema.dump(department), 200
+            return department_schema.dump(department), 201
 
     @staticmethod
     def delete(id: int):
@@ -109,7 +109,7 @@ class DepartmentAPI(Resource):
         except ValidationError as err:
             return {"message": json.dumps(err.messages)}, 404
         else:
-            return 204
+            return {"message": f"department with {id} succesful deleted"}, 204
 
 
 api.add_resource(DepartmentListAPI, '/departments/')

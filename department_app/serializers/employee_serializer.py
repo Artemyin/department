@@ -47,11 +47,11 @@ class EmployeeSchema(ma.Schema):
         :raises ValidationError: This name already exist in DB
         :return: None if same name for current employee
         """
-        name = data.get('name')    
-        id = data.pop('id')
-        current_employee = Employee.query.filter_by(id=id).first()
-        if name.lower() == current_employee.name.lower():
-            return
+        name = data.get('name')  
+        if id := data.pop('id', False):
+            current_employee = Employee.query.filter_by(id=id).first()
+            if name.lower() == current_employee.name.lower():
+                return
         query = Employee.query.filter(Employee.name.like(f'%{name}%')).all()
         if name.lower() in [employee.name.lower() for employee in query]:
             raise ValidationError("This name already exist in DB")

@@ -55,7 +55,6 @@ class EmployeeListAPI(Resource):
         """
         args = parser.parse_args()
         try:
-            print(args)
             employee = employee_schema.load(args)
             employee = employee_service.create(employee=employee)
         except ValidationError as err:
@@ -118,7 +117,7 @@ class EmployeeAPI(Resource):
         except ValidationError as err:
             return {"message": json.dumps(err.messages)}, 404
         else:
-            return 204
+            return {"message": f"employee with {id} succesful deleted"}, 204
 
 
 api.add_resource(EmployeeListAPI, '/employees/')

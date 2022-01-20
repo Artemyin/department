@@ -23,7 +23,7 @@
             <th>birthdate</th>
             <th>salary</th>
             <th>department</th>
-            <th>actions</th>
+            <!-- <th>actions</th> -->
           </tr>
         </thead>
         <tbody>
@@ -74,12 +74,13 @@ $(document).ready(function ()
               }
             }
         },
-        {data: 'id',
-            "render": function ( data, type, row, meta){
-              console.log(data, type, row, meta)
-              return `<div class='employee button' id='employee button ${data}'>soon will be avalible</div>`;
-            }
-        },
+        // {data: 'id',
+        //     "render": function ( data, type, row, meta){
+        //       console.log(data, type, row, meta)
+        //       return `<div class='employee button' id='employee button ${data}'>soon will be avalible</div>`;
+        //     }
+        // },
+
       ],    
     });
   }

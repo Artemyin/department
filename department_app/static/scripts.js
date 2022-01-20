@@ -158,7 +158,7 @@ function httpPostAsync(url, data, e)
     xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlHttp.send(data);
     xmlHttp.onload = function() {
-        if (xmlHttp.status != 200) {
+        if (xmlHttp.status != 201) {
             alert(`error: ${xmlHttp.response}`)
         } else {
             document.location.reload(true);

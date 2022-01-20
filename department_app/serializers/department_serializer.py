@@ -42,11 +42,11 @@ class DepartmentSchema(ma.Schema):
         :raises ValidationError: This name already exist in DB
         :return: None if same name for current department
         """
-        name = data.get('name')    
-        id = data.pop('id')
-        current_employee = Department.query.filter_by(id=id).first()
-        if name.lower() == current_employee.name.lower():
-            return
+        name = data.get('name')
+        # if id := data.pop('id', False):
+        #     current_employee = Department.query.filter_by(id=id).first()
+        #     if name.lower() == current_employee.name.lower():
+        #         return
         query = Department.query.filter(Department.name.like(f'%{name}%')).all()
         if name.lower() in [department.name.lower() for department in query]:
             raise ValidationError('This name already exist in DB')
