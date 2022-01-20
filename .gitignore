@@ -14,3 +14,6 @@ department_db
 **\*.pyc
 *.cpython-39.pyc
 department_app/department_db
+department_app/models/__pycache__/__init__.cpython-39.pyc
+department_app/models/__pycache__/department_model.cpython-39.pyc
+department_app/models/__pycache__/__init__.cpython-39.pyc

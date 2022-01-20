@@ -81,7 +81,7 @@ class DepartmentAPI(Resource):
         except ValidationError as err:
             return {"message": json.dumps(err.messages)}, 404
         try:
-            args['id'] = id
+            args.update(id=id)
             department = department_schema.load(args)
             department = department_service.update(department=department, id=id)   
         except ValidationError as err:
