@@ -11,13 +11,19 @@ logger=logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 def get_env():
+    """Get enviroment variable.
+    Returns:
+       enviroment variable: application settings
+    """
     return os.environ.get("ENV", "dev")
 
 def create_app():
-    """[summary]
-
+    """Application Factory.
+    Instansing flask app,
+    Get settings from settings.py
+    Initialising models, serializers, views, rest
     Returns:
-        [type]: [description]
+       app: application
     """
     app = Flask(__name__)
     env = get_env()
