@@ -95,8 +95,9 @@ class EmployeeAPI(Resource):
         try:
             employee_schema.is_id_exist(id)
         except ValidationError as err:
-            return {"message": json.dumps(err.messages)}, 400
+            return {"message": json.dumps(err.messages)}, 404
         try:
+            args['id'] = id
             employee = employee_schema.load(args)
             employee = employee_service.update(employee=employee, id=id)   
         except ValidationError as err:

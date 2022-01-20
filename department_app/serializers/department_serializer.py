@@ -1,4 +1,4 @@
-from marshmallow import fields, validates, ValidationError, post_load, validate
+from marshmallow import fields, validates, ValidationError, post_load, validate, validates_schema
 
 from .serializer import ma
 from .employee_serializer import EmployeeSchema
@@ -29,6 +29,28 @@ class DepartmentSchema(ma.Schema):
         query = Department.query.filter(Department.name.like(f'%{name}%')).all()
         if name.lower() in [department.name.lower() for department in query]:
             raise ValidationError('This name already exist in DB')
+
+    @validates_schema(pass_original=True)   
+    def is_name_exist(self, data, original_data, **kwargs):
+        """Custom field validator for name
+        check is id already exist in db, 
+        if for current department name change 
+        register only or not change at all return None
+
+        :param name: department name
+        :type name: str
+        :raises ValidationError: This name already exist in DB
+        :return: None if same name for current department
+        """
+        name = data.get('name')    
+        id = data.pop('id')
+        current_employee = Department.query.filter_by(id=id).first()
+        if name.lower() == current_employee.name.lower():
+            return
+        query = Department.query.filter(Department.name.like(f'%{name}%')).all()
+        if name.lower() in [department.name.lower() for department in query]:
+            raise ValidationError('This name already exist in DB')
+
 
     @validates("id")
     def is_id_exist(self, id: int):

@@ -81,12 +81,14 @@ class DepartmentAPI(Resource):
         except ValidationError as err:
             return {"message": json.dumps(err.messages)}, 404
         try:
+            args['id'] = id
             department = department_schema.load(args)
             department = department_service.update(department=department, id=id)   
         except ValidationError as err:
             return {"message": json.dumps(err.messages)}, 400
         else:
             return department_schema.dump(department), 200
+            
 
     @staticmethod        
     def delete(id: int):
