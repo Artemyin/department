@@ -22,18 +22,18 @@ class DepartmentListAPI(Resource):
     @staticmethod
     def get():
         """Handle GET request for /department/
-        get all departmnets from db and serialized it by marshmellow 
+        get all departmnets from db and serialized it by marshmellow
         """
         departments = department_service.read_all()
         return department_schema.dump(departments, many=True), 200
 
     @staticmethod
     def post():
-        """Handle POST request for department 
-        parse args, then  deserialisation, 
+        """Handle POST request for department
+        parse args, then  deserialisation,
         after pass created Department object to service for creation.
         after creation return created object with HTTP status code 200
-        if during deserialisation catch exception, json error mesages with  
+        if during deserialisation catch exception, json error mesages with
         HTTP status code 200 will return.
         """
         args = parser.parse_args()
@@ -44,7 +44,7 @@ class DepartmentListAPI(Resource):
             return {"message": json.dumps(err.messages)}, 400
         else:
             return department_schema.dump(department), 201
-        
+
 
 class DepartmentAPI(Resource):
     """API rest service for '/departments/<int:id>'
@@ -54,10 +54,10 @@ class DepartmentAPI(Resource):
         """Handle GET request for /department/<id>
         via id get department and return
         json with http response code
-        
+
         :param id: department id
         :type id: int
-        """ 
+        """
         try:
             department_schema.is_id_exist(id)
             department = department_service.read_by_param(id=id)[0]
@@ -66,7 +66,6 @@ class DepartmentAPI(Resource):
         else:
             return department_schema.dump(department), 200
 
-        
     @staticmethod
     def put(id: int):
         """Handle PUT request for /department/<id>
@@ -83,14 +82,14 @@ class DepartmentAPI(Resource):
         try:
             args.update(id=id)
             department = department_schema.load(args)
-            department = department_service.update(department=department, id=id)   
+            department = department_service.update(department=department,
+                                                   id=id)
         except ValidationError as err:
             return {"message": json.dumps(err.messages)}, 400
         else:
             return department_schema.dump(department), 200
-            
 
-    @staticmethod        
+    @staticmethod
     def delete(id: int):
         """Handle DELETE request for /department/<id>
         if department with this id exist it will be deleted
@@ -100,7 +99,7 @@ class DepartmentAPI(Resource):
 
         :param id: department id
         :type id: int
-        """        
+        """
         orphan = request.args.get('orphan', type=int)
         try:
             department_schema.is_id_exist(id)
