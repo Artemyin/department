@@ -1,8 +1,12 @@
+
 http://127.0.0.1:5000/ 
+
 ![home_page](srs\home_page.png)
 ![home_page](srs/home_page.png)
 
+
 ./employees/
+
 ![employees](srs\employees.png)
 ![employees](srs/employees.png)
 
@@ -15,7 +19,9 @@ http://127.0.0.1:5000/
 ![date_rane_and_search_employees_from_employees](srs\date_rane_and_search_employees_from_employees.png)
 ![date_rane_and_search_employees_from_employees](srs/date_rane_and_search_employees_from_employees.png)
 
+
 ./employees/<id>
+
 ![employee](srs\employee.png)
 ![employee](srs/employee.png)
 
@@ -25,7 +31,9 @@ http://127.0.0.1:5000/
 ![delete_employee](srs\delete_employee.png)
 ![delete_employee](srs/delete_employee.png)
 
+
 ./departments/
+
 ![departments](srs\departments.png)
 ![departments](srs/departments.png)
 
@@ -38,7 +46,9 @@ http://127.0.0.1:5000/
 ![delete_department_from_departments](srs\delete_department_from_departments.png)
 ![delete_department_from_departments](srs/delete_department_from_departments.png)
 
+
 ./departments/<id>
+
 ![department](srs\department.png)
 ![department](srs/department.png)
 
