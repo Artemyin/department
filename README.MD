@@ -32,26 +32,65 @@ department-app (a project / app directory)
 
 #### Setup
 1. Clone repo
-2. Create virtual environment
+
+```
+$ git clone  https://github.com/Artemyin/department.git
+```
+
+2. Create & activate virtual environment 
+
+```
+$ virualenv venv
+$ . venv/bin/activate
+```
+
 3. Install project requirements
+
+```
+$ pip install -r requirements.txt
+```
+
 5. Run the migration scripts to create database schema
+
+```
+$ bash setup.sh
+```
+
 5. [optional] Run populate fake db comant to create fake data
 
-- python populate_fake_table.py
+```
+$ python populate_fake_table.py
+```
 
 6. [optional] Run wipe fake data for erasing data base
 
-- python wipe_data.py
+```
+$ python wipe_data.py
+```
 
 7. run application
 
-  - flask run:
-
+```
+$ flask run:
+```
+application will avalible on :
   - http://127.0.0.1:5000/ 
 
-  - flask run --host=0.0.0.0:
-
+- or 
+```
+$ flask run --host=0.0.0.0:
+```
+application will avalible on:
   - http://192.168.1.155:5000/ 
+
+- or 
+```
+$ python wsgi.py
+```
+application will avalible on :
+  - http://127.0.0.1:5000/ 
+
+
 
 #### Departments api:
  - GET /api/v1/departments - return all departments in json format
