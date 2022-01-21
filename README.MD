@@ -78,7 +78,7 @@ response: 200 OK
 
         ],
         "name": "Management",
-        "average_salary": 3933,
+        "average_salary": 561.86,
         "id": 1
     },
     {
@@ -99,7 +99,7 @@ response: 200 OK
 
         ],
         "name": "Sales",
-        "average_salary": 6660,
+        "average_salary": 475.71,
         "id": 2
     }
 ]
@@ -150,7 +150,7 @@ response: 200 OK or 404 NOT FOUND
         ...
     ],
     "name": "Sales",
-    "average_salary": 6660,
+    "average_salary": 475.71,
     "id": 2
 }
 ```
