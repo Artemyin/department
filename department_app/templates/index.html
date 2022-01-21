@@ -5,5 +5,26 @@
 {% endblock %}
 
 {% block main %}
-<a href='/departments'>Department</a>
+<div class="text-left"> 
+    <h1> This web application allow:</h1>
+
+    <p>display a list of departments and the average salary (calculated automatically) for these departments</p>
+
+    <p></p>display a list of employees in the departments with an indication of the salary for each employee and</p>
+
+    <p></p>a search datepick field to search for employees born in the period between dates</p>
+
+    <p></p>change (add / edit / delete) the above data</p>
+</div>   
+<div class="list-group"> 
+
+<a href='/departments' class="list-group-item list-group-item-action">Departments</a>
+
+<a href='/employees' class="list-group-item list-group-item-action">Employees</a>
+
+<a href='/api/v1/departments' class="list-group-item list-group-item-action">Departments api service</a>
+
+<a href='/api/v1/employees' class="list-group-item list-group-item-action">Employees api service</a>
+
+</div> 
 {% endblock %}
