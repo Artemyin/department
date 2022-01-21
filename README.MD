@@ -1,20 +1,22 @@
+Structure of project
+
 department-app (a project / app directory)
 
-|__ migrations (this package must include migration files to manage database schema changes )
+- migrations (this package include migration files to manage database schema changes )
 
-|__ models (this package must include modules with Python classes describing DB models (for ORM only))
+- models (this package include modules with Python classes describing DB models (for ORM only))
 
-|__ service (this package must include modules with functions / classes to work with DB (CRUD operations))
+- service (this package include modules with functions / classes to work with DB (CRUD operations))
 
-|__ serializers (this package must include modules with functions / classes to work with DB (CRUD operations))
+- serializers (this package include modules with functions / classes to serialize, deserialize and validation data
 
-|__ rest (this package must include modules with RESTful service implementation)
+- rest (this package include modules with RESTful service implementation)
 
-|__ templates (this folder must include web app html templates)
+- templates (this folder include web app html templates)
 
-|__ static (this folder must include static files (js, css, images, etc,))
+- static (this folder must static files (js, css, images, etc,))
 
-|__ views (this package must include modules with Web controllers / views) NOTES:
+- views (this package must modules with Web controllers / views) 
 
 #### Technologies:
 - Python 3.9
@@ -23,7 +25,7 @@ department-app (a project / app directory)
 - from flask-migrate - Migrate
 - flask_restful
 - JavaScript
-- DataTables 
+- DataTables.js 
 
 
 Setup
@@ -32,13 +34,22 @@ Setup
 3. Install project requirements
 5. Run the migration scripts to create database schema
 5. [optional] Run populate fake db comant to create fake data
+
+python populate_fake_table.py
+
 6. [optional] Run wipe fake data for erasing data base
 
-flask run
-http://127.0.0.1:5000/ 
+python wipe_data.py
 
-flask run --host=0.0.0.0
-http://192.168.1.155:5000/ 
+7. run application
+
+  - flask run:
+
+  - http://127.0.0.1:5000/ 
+
+  - flask run --host=0.0.0.0:
+
+  - http://192.168.1.155:5000/ 
 
 #### Departments api:
  - GET /api/v1/departments - return all departments in json format
@@ -83,7 +94,10 @@ with the values, provided in json format. Example:
   "to_do": "something do2"
 }
 ```
-- DELETE /api/v1/departments/*id* - deletes the department with the given id  
+- DELETE /api/v1/departments/*id*?orphan=0 - deletes the department with the given id, employee of this department will move to None department
+
+- DELETE /api/v1/departments/*id*?orphan=1 - deletes the department with his employees by the given id 
+
    
    #### Employees api
  - GET /api/v1/employees - return all employees in json format
