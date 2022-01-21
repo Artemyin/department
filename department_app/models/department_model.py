@@ -15,7 +15,7 @@ class Department(db.Model):
         """Departmen's employees average salary property
         """
         try:
-            return round(sum(employee.salary for employee in self.employee)/(1 or len(self.employee)), 2)
+            return round(sum(employee.salary for employee in self.employee)/(len(self.employee) or 1), 2)
         except ZeroDivisionError:
             return 0
     

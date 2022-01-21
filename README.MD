@@ -6,7 +6,7 @@ department-app (a project / app directory)
 
 - migrations (this package include migration files to manage database schema changes )
 
-- models (this package include modules with Python classes describing DB models (for ORM only))
+- models (this package include modules with Python classes describing DB models)
 
 - service (this package include modules with functions / classes to work with DB (CRUD operations))
 
