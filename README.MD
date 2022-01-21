@@ -1,4 +1,4 @@
-Structure of project
+#### Structure of project
 
 department-app (a project / app directory)
 
@@ -28,18 +28,18 @@ department-app (a project / app directory)
 - DataTables.js 
 
 
-Setup
+#### Setup
 1. Clone repo
 2. Create virtual environment
 3. Install project requirements
 5. Run the migration scripts to create database schema
 5. [optional] Run populate fake db comant to create fake data
 
-python populate_fake_table.py
+- python populate_fake_table.py
 
 6. [optional] Run wipe fake data for erasing data base
 
-python wipe_data.py
+- python wipe_data.py
 
 7. run application
 
@@ -54,50 +54,134 @@ python wipe_data.py
 #### Departments api:
  - GET /api/v1/departments - return all departments in json format
  
- - POST /api/v1/departments - add a new department to the database (post request must be followed
- with json with the fields to add). Example:  
- ```json
+response: 200 OK
+
+```json
 [
-  {
-    "employees": [
-      {
-        "date_of_birth": "07/12/1999", 
-        "hospital_id": "Paramedical", 
-        "id": 56, 
-        "name": "John Doe", 
-        "salary": 1300
-      }
-    ], 
-    "id": 97, 
-    "name": "Paramedical", 
-    "to_do": "something do1"
-  }
+    {
+        "employee": [
+            {
+                "birthdate": "1962-08-11",
+                "name": "Christopher Carroll",
+                "salary": 854,
+                "id": 6
+            },
+            {
+                "birthdate": "1961-06-05",
+                "name": "Brenda Mathis",
+                "salary": 408,
+                "id": 17
+            },
+            ...
+
+        ],
+        "name": "Management",
+        "average_salary": 3933,
+        "id": 1
+    },
+    {
+        "employee": [
+            {
+                "birthdate": "1976-12-23",
+                "name": "Maria Parker",
+                "salary": 720,
+                "id": 7
+            },
+            {
+                "birthdate": "1976-01-08",
+                "name": "Michelle Jacobs",
+                "salary": 802,
+                "id": 8
+            },
+            ...
+
+        ],
+        "name": "Sales",
+        "average_salary": 6660,
+        "id": 2
+    }
 ]
 ```
-- GET /api/v1/departments/*id* - return the department with the given id 
-in json format
-- PUT /api/v1/departments/*id* - updates the department with the given id
-with the values, provided in json format. Example:  
- ```json
+
+ - POST /api/v1/departments - add a new department to the database (post request must be followed
+ with json with the fields to add). Example:  
+
+request:
+
+```json
 {
-  "employees": [
-    {
-      "date_of_birth": "11/30/1989", 
-      "hospital_id": "Nurcing department", 
-      "id": 58, 
-      "name": "Will Hunting", 
-      "salary": 1300
-    }
-  ], 
-  "id": 99, 
-  "name": "Nurcing department", 
-  "to_do": "something do2"
+    "name": "New Department"
 }
 ```
+
+response: 201 CREATED or 400 BAD REQUEST
+
+```json
+{
+    "employee": [],
+    "name": "New Department",
+    "average_salary": 0,
+    "id": 6
+}
+```
+
+- GET /api/v1/departments/*id* - return the department with the given id 
+in json format
+
+response: 200 OK or 404 NOT FOUND
+
+```json
+{
+    "employee": [
+        {
+            "birthdate": "1976-12-23",
+            "name": "Maria Parker",
+            "salary": 720,
+            "id": 7
+        },
+        {
+            "birthdate": "2001-06-19",
+            "name": "Bryce Harris",
+            "salary": 573,
+            "id": 53
+        },
+        ...
+    ],
+    "name": "Sales",
+    "average_salary": 6660,
+    "id": 2
+}
+```
+
+- PUT /api/v1/departments/*id* - updates the department with the given id
+with the values, provided in json format. Example:  
+
+request:
+
+```json
+{
+  "name": "Updated New Department"
+}
+```
+
+response: 201 CREATED or 404 NOT FOUND or 400 BAD REQUEST
+
+```json
+{
+    "average_salary": 0,
+    "employee": [],
+    "id": 6,
+    "name": "Updated New Department"
+}
+```
+
 - DELETE /api/v1/departments/*id*?orphan=0 - deletes the department with the given id, employee of this department will move to None department
+
+response: 204 NO CONTENT or 404 NOT FOUND
 
 - DELETE /api/v1/departments/*id*?orphan=1 - deletes the department with his employees by the given id 
 
+response: 204 NO CONTENT or 404 NOT FOUND
    
    #### Employees api
  - GET /api/v1/employees - return all employees in json format
