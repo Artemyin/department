@@ -14,10 +14,8 @@ class Department(db.Model):
     def average_salary(self) -> float:
         """Departmen's employees average salary property
         """
-        try:
-            return round(sum(employee.salary for employee in self.employee)/(len(self.employee) or 1), 2)
-        except ZeroDivisionError:
-            return 0
+        return round(sum(employee.salary for employee in self.employee)/(len(self.employee) or 1), 2)
+
     
     def __init__(self, name: str):
         """Department model constructor.
