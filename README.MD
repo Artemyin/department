@@ -1,3 +1,5 @@
+try me: https://murmuring-wildwood-38659.herokuapp.com/
+
 #### Structure of project
 
 department-app (a project / app directory)
@@ -243,8 +245,6 @@ and returns them in json format
 #### Here is the list of available addresses of web application:
 
  
-
-
  #### Departments
 
  - /departments - display all the departments
