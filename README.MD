@@ -28,6 +28,7 @@ department-app (a project / app directory)
 - flask_restful
 - JavaScript
 - DataTables.js 
+- SQLite3
 
 
 #### Setup
@@ -71,7 +72,7 @@ $ python wipe_data.py
 7. run application
 
 ```
-$ flask run:
+$ flask run
 ```
 application will avalible on :
   - http://127.0.0.1:5000/ 
