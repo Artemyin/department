@@ -1,4 +1,4 @@
-TRY MEgpreq: https://murmuring-wildwood-38659.herokuapp.com/
+TRY ME: https://murmuring-wildwood-38659.herokuapp.com/
 
 #### Structure of project
 
@@ -86,12 +86,12 @@ $ python wipe_data.py
 ```
 $ flask run
 ```
-application will avalible on :
+application will avalible on:
   - http://127.0.0.1:5000/ 
 
 - or 
 ```
-$ flask run --host=0.0.0.0:
+$ flask run --host=0.0.0.0
 ```
 application will avalible on:
   - http://192.168.1.155:5000/ 
@@ -100,7 +100,7 @@ application will avalible on:
 ```
 $ python wsgi.py
 ```
-application will avalible on :
+application will avalible on:
   - http://127.0.0.1:5000/ 
 
 
