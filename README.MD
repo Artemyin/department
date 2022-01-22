@@ -1,4 +1,4 @@
-try me: https://murmuring-wildwood-38659.herokuapp.com/
+TRY MEgpreq: https://murmuring-wildwood-38659.herokuapp.com/
 
 #### Structure of project
 
@@ -30,6 +30,18 @@ department-app (a project / app directory)
 - DataTables.js 
 - SQLite3
 
+
+#### Prerequisite
+- install Python
+- - https://www.python.org/downloads/
+- install PIP
+- - if ```$ pip help``` not work:
+- - https://pip.pypa.io/en/stable/installation/
+- install virtualenv
+- - https://virtualenv.pypa.io/en/latest/installation.html
+
+- Installing packages using pip and virtual environments
+- -  https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/
 
 #### Setup
 1. Clone repo
@@ -380,7 +392,7 @@ response: 200 OK or 404 NOT FOUND
         }
     ],
     "recordsFiltered": 2,
-    "recordsTotal": 51,
+    "recordsTotal": 51, 
     "draw": null
 }
 ```
