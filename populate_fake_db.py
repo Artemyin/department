@@ -53,9 +53,9 @@ def create_fake_users(n):
 
 
 if __name__ == '__main__':
-    # if len(sys.argv) <= 1:
-    #     print('Pass the number of users you want to create as an argument.')
-    #     sys.exit(1)
-    create_fake_users(50)
+    if len(sys.argv) <= 1:
+        print('Pass the number of users you want to create as an argument.')
+        sys.exit(1)
+    create_fake_users(int(sys.argv[1]))
 
 
