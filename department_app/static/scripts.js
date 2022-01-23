@@ -87,12 +87,12 @@ document.addEventListener('DOMContentLoaded', function() {
         httpPostAsync('/employees/', jsondata)
     });
 });
-function make_emp(id, name, salary, count, department){
-var row_table = `` +
-            `<td>${id}</td>`+
+function make_emp(id, name, birthdate, salary, department){
+var row_table = `<td>${id}</td>`+
             `<td>${name}</td>`+
+            `<td>${birthdate}</td>`+
             `<td>${salary}</td>`+
-            `<td><a href="/employees/${department.id}">${department.name}}</a></td>`
+            `<td><a href="/employees/${department.id}">${department.name}</a></td>`
             return row_table
         };
 
@@ -139,9 +139,10 @@ function httpPutAsync(url, id, data, callback) {
             } if (url == '/employees/'){
                 const response = JSON.parse(xmlHttp.response);
                 const employee_row = document.getElementById('employee_row'+response.id);
-                employee_row.innerHTML = make_emp(response.id, response.name, response.salary, response.count, response.department);
+               
+                employee_row.innerHTML = make_emp(response.id, response.name, response.birthdate, response.salary, response.department);
             }
-        } if (xmlHttp.readyState == 4 && xmlHttp.status == 400) {
+        } if (xmlHttp.readyState == 4 && xmlHttp.status == 400){
             alert(`error: ${xmlHttp.response}`)
         };
     }
