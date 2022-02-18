@@ -11,8 +11,7 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "this-is-the-default-key")
     FLASK_APP = os.getenv("FLASK_APP", "department_app")
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '').replace(
-        'postgres://', 'postgresql://') or \
-        "sqlite:///' + os.path.join(basedir, 'department_db')    
+        'postgres://', 'postgresql://') or 'sqlite:///department_db'
     DATABASE_CONNECT_OPTIONS = {}
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TEMPLATES_AUTO_RELOAD = True

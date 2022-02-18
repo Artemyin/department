@@ -5,8 +5,8 @@ import unittest
 from flask import current_app
 from department_app import create_app
 from department_app.models.base import db
-from departmnet_app.models.department_model import Department
-from departmnet_app.models.employee_model import Employee
+from department_app.models.department_model import Department
+from department_app.models.employee_model import Employee
 
 
 class TestWebApp(unittest.TestCase):
@@ -29,25 +29,16 @@ class TestWebApp(unittest.TestCase):
         assert current_app == self.app
 
     def populate_db(self):
-        employees = []
         departments = []
-        employee1 = Employee(
-            name="Artemii Noskov", 
-            department="1", 
-            salary=100, 
-            birthdate="1994-01-04"
-        )
-        employees.append(employee1)
         department1 = Department(name="hr")
         departments.append(department1)
-        for emploee in employees:
-            db.session.add(employee)
         for department in departments:
             db.session.add(department)
         db.session.commit()
     
     def test_api_get_departments(self):
-        response = self.client.get('/api/v1/departments')
+        response = self.client.get('/api/v1/departments/')
+        print(f'{response=}')
         assert response.status_code == 200
         assert len(response.json) == 1
         assert response.json[0]['name'] == "hr"
