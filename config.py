@@ -1,9 +1,7 @@
 import os
 
 class Config:
-    """
-    
-    """
+    """Configuration"""
     NAME = "Base"
     basedir = os.path.abspath(os.path.dirname(__file__))
     DEBUG = False
