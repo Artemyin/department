@@ -1,5 +1,6 @@
 import os
 
+
 class Config:
     """Configuration"""
     NAME = "Base"
@@ -14,12 +15,13 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TEMPLATES_AUTO_RELOAD = True
 
+
 class ProductionConfig(Config):
     """Production config
     Use for production deployment
     """
     NAME = "Production"
-    
+
 
 class DevelopmentConfig(Config):
     """Development config
