@@ -17,3 +17,6 @@ department_app/department_db
 department_app/models/__pycache__/__init__.cpython-39.pyc
 department_app/models/__pycache__/department_model.cpython-39.pyc
 department_app/models/__pycache__/__init__.cpython-39.pyc
+department_app/migrations/alembic.ini
+department_app/migrations/script.py.mako
+department_app/migrations/versions/0776d0d46b5e_.py
