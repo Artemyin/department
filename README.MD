@@ -1,5 +1,30 @@
 TRY ME: https://murmuring-wildwood-38659.herokuapp.com/
 
+
+<details>
+  <summary>PLANS</summary>
+ 
+- [ ] host on aws
+- [ ] make docker
+- [ ] split app and postgres db on two separate containers
+- [ ] add tests
+   - [ ] add integration tests 
+   - [ ] add functional tests 
+   - [ ] use unit tests 
+   - [ ] use pytests tests 
+- [ ] add  CI/CD
+- [ ] refactorin verefication/validation/serialisation layer
+- [ ] add typing
+- [ ] replace Marshmellow to Pydantic?
+- [ ] add swager, openapi
+
+global planes:
+- [ ] kubernates
+- [ ] ansible
+- [ ] terraform
+
+</details>
+
 #### Structure of project
 
 department-app (a project / app directory)
